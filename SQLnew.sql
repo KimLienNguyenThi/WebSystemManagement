@@ -86,7 +86,6 @@ CREATE TABLE CONTRACTS (
     FOREIGN KEY (CUSTOMERID) REFERENCES COMPANY(CUSTOMERID),
 	IS_ACTIVE BIT NOT NULL, -- 0 NGỪNG HOẠT ĐỘNG, 1 HOẠT ĐỘNG
 	CONSTATUS INT --0: CHƯA KÝ, 1: Đã ký, 2. Chờ Client ký , 3 :Kyhoantat 4.Đã duyệt ký  5 đã thanh toán 6 Duyệt (chính thức),7: Gia hạn, 8: Bị từ chối  
-	--cHỈ LẤY CÁI MỚI NHẤT TỪ CONTRACTFILE CHO HỢP ĐỒNG ĐÓ
 );
 
 
@@ -141,7 +140,6 @@ CREATE TABLE REQUIREMENTS
 	REQUIREMENTSID VARCHAR(10) NOT NULL UNIQUE, --MÃ YÊU C?U
 	--REQUIREMENTSSTATUS NVARCHAR(40) NOT NULL,--TR?NG THÁI YÊU C?U
 	REQUIREMENTSSTATUS INT NOT NULL,--TR?NG THÁI 0 Yêu cầu hỗ trợ,  1 Yêu cầu chấp nhận, 2.Đang xử lý  3. hỗ trợ hoàn tất 4. Trì hoãn  5. Đóng/hủy
-
 	DATEOFREQUEST DATETIME,					--NGÀY T?O
 	DESCRIPTIONOFREQUEST NVARCHAR(MAX) NOT NULL   ,    --MÔ  TA YÊU C?U s
     CONTRACTNUMBER VARCHAR(10) NOT NULL,
@@ -407,11 +405,11 @@ INSERT INTO REVIEW_CRITERIA (CRITERIA_NAME) VALUES
 select * from REQUIREMENTS 
 select * from HISTORYREQ
 select * from ASSIGN
---select * from company 
---select * from Account 
---select * from contracts
---select * from CONTRACT_FILES
---select * from CONTRACT_STATUS_HISTORY
+select * from company 
+select * from Account 
+select * from contracts
+select * from CONTRACT_FILES
+select * from CONTRACT_STATUS_HISTORY
 --select * from Payment
 --select * from PAYMENT_TRANSACTION
 --select * from SERVICE_TYPE
@@ -419,8 +417,8 @@ select * from ASSIGN
 --select * from PASSWORDRESETTOKEN
 --select * from endow
 --select * from REGULATIONS
---select * from CONTACT
---select * from NOTIFICATIONS
+select * from CONTACT
+select * from NOTIFICATIONS
 select * from REVIEW
 select * from REVIEW_CRITERIA
 select * from REVIEW_DETAIL

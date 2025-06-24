@@ -5,7 +5,6 @@
 @{
     var fileName = Context.Request.Query["fileName"];
     var email = Context.Request.Query["email"];
-    // var apiDomain = "https://localhost:7190"; // Địa chỉ API
     var apiDomain = @ApiConfigs.BaseSiteUrl;
     var pdfUrl = $"{apiDomain}/signed-contracts/{fileName}";
     var contractNumber = Context.Request.Query["contractNumber"];

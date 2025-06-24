@@ -190,19 +190,11 @@
                     select.empty().append('<option value="">-- Chọn --</option>');
 
                     data.listRegu.forEach(function (item) {
-                        select.append(`<option value="${item.serviceGroupid}" data-price="${item.price}">${item.serviceTypeNames}</option>`);
+                        select.append(`<option value="${item.serviceGroupid}">${item.serviceTypeNames}</option>`);
                     });
 
                     select.change(function () {
                         const selectedOption = $(this).find("option:selected");
-                        const price = selectedOption.data("price");
-                        const totalPriceElement = $('#totalPrice');
-
-                        if (price) {
-                            totalPriceElement.text(`Tổng tiền: ${price} VNĐ`);
-                        } else {
-                            totalPriceElement.text('Tổng tiền: 0 VNĐ');
-                        }
                     });
 
                 },
@@ -286,6 +278,8 @@
                     const modalSuccess = new bootstrap.Modal(document.getElementById('ModalSuccess'));
                     document.getElementById('contentModalSuccess').innerText = 'Gửi liên hệ thành công! Chúng tôi sẽ phản hồi sớm nhất.';
                     modalSuccess.show();
+                    resetForm();
+
                 },
                 error: function (xhr, status, error) {
                     const modalFail = new bootstrap.Modal(document.getElementById('failModal'));
@@ -293,6 +287,11 @@
                 }
             });
         }
+        function resetForm() {
+        $('#name, #email, #phone, #companyName, #message').val('');
+        $('#serviceType').val(''); // reset dropdown
+        $('.invalid-feedback').text('');
+}
 
     </script>
 

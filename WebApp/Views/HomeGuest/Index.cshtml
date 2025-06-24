@@ -798,12 +798,19 @@
                     const modalSuccess = new bootstrap.Modal(document.getElementById('ModalSuccess'));
                     document.getElementById('contentModalSuccess').innerText = 'Gửi liên hệ thành công! Chúng tôi sẽ phản hồi sớm nhất.';
                     modalSuccess.show();
+                    resetForm();
                 },
                 error: function (xhr, status, error) {
                     const modalFail = new bootstrap.Modal(document.getElementById('failModal'));
                     modalFail.show();
                 }
             });
+        }
+        function resetForm() {
+            $('#name, #email, #phone, #companyName, #message').val('');
+            $('#serviceType').val(''); // reset dropdown
+            $('#totalPrice').text('Tổng tiền: 0 VNĐ'); // reset giá
+            $('.invalid-feedback').text('');
         }
 
     </script>

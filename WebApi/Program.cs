@@ -173,6 +173,8 @@ builder.Services.AddTransient<TransactionService>();
 builder.Services.AddTransient<ContactService>();
 builder.Services.AddScoped<ChatbotService>();
 
+builder.Services.AddScoped<StatisticsReportsService>();
+
 builder.Services.AddTransient<IAdminContactService, AdminContactService>();
 
 builder.Services.AddTransient<INotificationService, NotificationService>();

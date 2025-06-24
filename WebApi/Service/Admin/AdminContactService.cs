@@ -98,8 +98,18 @@ namespace WebApi.Service.Admin
             if (data == null)
                 return false;
 
+            var noti = await _context.Notifications.Where(item => item.ReferenceId == id).FirstOrDefaultAsync();
+            if (data == null)
+                return false;
+
+            if (noti == null)
+                return false;
+
             data.Status = status;
             _context.Contacts.Update(data);
+            noti.IsRead = true;
+            _context.Notifications.Update(noti);
+
             await _context.SaveChangesAsync();
 
             return true;

@@ -1,0 +1,653 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .container {
+        padding: 20px;
+    }
+    .stat-boxes {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 15px;
+        margin-bottom: 10px;
+    }
+
+    .stat-box {
+        flex: 0 0 calc(25% - 15px); /* 4 cột mỗi hàng */
+        background: #6c757d;
+        color: #fff;
+        padding: 15px 20px;
+        border-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-width: 220px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease;
+    }
+
+    .stat-box:hover {
+        transform: translateY(-3px);
+    }
+
+    .stat-box .info {
+        text-align: left;
+    }
+
+    .stat-box .info h2 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .stat-box .info div {
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .stat-box .icon {
+        font-size: 24px;
+        opacity: 0.8;
+    }
+
+    /* Màu */
+    .purple { background-color: #6f42c1; }
+    .blue   { background-color: #007bff; }
+    .green  { background-color: #28a745; }
+    .orange { background-color: #fd7e14; }
+    .red    { background-color: #dc3545; }
+    .cyan   { background-color: #17a2b8; }
+
+    @@media (max-width: 768px) {
+        .stat-box {
+            flex: 0 0 calc(33.333% - 20px);
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .stat-box {
+            flex: 0 0 100%;
+        }
+    }
+    .charts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: space-around;
+    }
+
+    .chart-container {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+    }
+
+        .chart-container h4 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+    #revenuePanel {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+        #revenuePanel h4 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 22px;
+            color: #333;
+        }
+
+        #revenuePanel .stat-boxes {
+            justify-content: center; /* Căn giữa các box */
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        #revenuePanel .stat-box {
+            flex: 0 0 280px;
+            margin: 10px;
+            text-align: center;
+            background-color: #f0f4f8; /* màu sáng hơn */
+            color: #333;
+        }
+
+        #revenuePanel .chart-container {
+            width: 100%;
+            max-width: 1000px;
+        }
+        @@media (min-width: 768px) {
+            #monthlyRevenueChart {
+                width: 1000px !important;
+                height: 300px !important;
+            }
+        }
+
+    #monthlyRevenueChart {
+        width: 100% !important;
+        height: 300px !important;
+    }
+    #servicePanel {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        #servicePanel .chart-container {
+            height: 450px; /* 👈 Chiều cao chính xác */
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+    #serviceUsageChart {
+        width: 100% !important;
+        height: 100% !important; /* 👈 Rất quan trọng để canvas fill đúng */
+    }
+
+        #servicePanel h4 {
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+
+    #ratingPanel {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        #ratingPanel h4 {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        #ratingPanel .chart-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        #ratingPanel .chart-container {
+            flex: 1 1 48%;
+            max-width: 45%;
+            min-width: 300px;
+            height: 350px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        #ratingPanel canvas {
+            flex-grow: 1;
+            width: 90% !important;
+            height: auto !important;
+        }
+
+
+
+        .flex-shrink-0 {
+        height: 60px;
+
+    }
+</style>
+
+<body>
+
+    <div id="companyListContainer" class="container-fluid d-flex flex-column vh-100">
+
+        <div class="row flex-shrink-0">
+            <div class="col-12">
+                <div class="card p-2" >
+                    <form class="d-flex align-items-center w-100" style="gap: 10px;" >
+                        <button type="button" class="btn btn-primary" onclick="showPanel('clientPanel')"> Khách hàng</button>
+                        <button type="button" class="btn btn-primary" onclick="showPanel('revenuePanel')">📊 Doanh thu</button>
+                        <button type="button" class="btn btn-success" onclick="showPanel('servicePanel')">🛠️ Dịch vụ</button>
+                        <button type="button" class="btn btn-warning" onclick="showPanel('ratingPanel')">⭐ Đánh giá</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mục hiển thị danh sách -->
+        <div class="row flex-grow-1 overflow-auto">
+            <div class="col-12">
+                <div id="clientPanel" class="sub-panel">
+                    @* hiển thị nội dung của khách hàng *@
+                </div>
+                <!-- PANEL: DOANH THU -->
+                <div id="revenuePanel" class="sub-panel" style="display:none;">
+                    <div class="d-flex align-items-center mb-3" style="gap: 10px;">
+                         <h5>📊 Báo cáo doanh thu</h5>
+
+                        <select id="yearSelector" class="form-select" style="width: auto;">
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2022</option>
+                            <option value="2024">2021</option>
+                            <option value="2024">2020</option>
+
+                        </select>
+                        <button class="btn btn-primary" onclick="loadRevenueData()">Xem</button>
+                    </div>
+
+                    <div class="stat-boxes">
+                        <div class="stat-box green">
+                            <div class="info">
+                                <h2 id="totalPaid">0₫</h2>
+                                <div>Tổng doanh thu đã thanh toán</div>
+                            </div>
+                        </div>
+                        <div class="stat-box blue">
+                            <div class="info">
+                                <h2 id="successfulTrans">0</h2>
+                                <div>Giao dịch thành công</div>
+                            </div>
+                        </div>
+                        <div class="stat-box red">
+                            <div class="info">
+                                <h2 id="failedTrans">0</h2>
+                                <div>Giao dịch thất bại</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Biểu đồ -->
+                    <div class="charts">
+                        <div class="chart-container">
+                            <h4>📈 Doanh thu theo tháng</h4>
+                            <canvas id="monthlyRevenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PANEL: DỊCH VỤ -->
+                <div id="servicePanel" class="sub-panel" style="display:none;">
+                    <h5>🛠️ Thống kê dịch vụ</h5>
+
+                    <div class="chart-container">
+                        <p>Số lượng hợp đồng theo loại dịch vụ</p>
+                        <canvas id="serviceUsageChart" style="width: 100%; height: 400px;"></canvas>
+                    </div>
+                </div>
+
+                <!-- PANEL: ĐÁNH GIÁ -->
+                <div id="ratingPanel" class="sub-panel" style="display:none;">
+                    <h5>⭐ Thống kê đánh giá</h5>
+
+                    <div class="chart-row d-flex flex-wrap justify-content-between" style="gap: 20px;">
+                        <div class="chart-container">
+                            <h4>Trung bình sao theo tiêu chí</h4>
+                            <canvas id="ratingBarChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>Tỷ lệ mức sao bài đánh giá</h4>
+                            <canvas id="starDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    let revenueChartInstance = null;
+    let serviceChartInstance = null;
+    let ratingBarChartInstance = null;
+    let starChartInstance = null;
+
+    window.onload = function () {
+        showPanel('clientPanel');
+
+        const currentYear = new Date().getFullYear();
+        const select = document.getElementById("yearSelector");
+        for (let y = currentYear; y >= currentYear - 5; y--) {
+            const opt = document.createElement("option");
+            opt.value = y;
+            opt.text = y;
+            if (y === currentYear) opt.selected = true;
+            select.appendChild(opt);
+        }
+    };
+
+    const tokenJWT = localStorage.getItem("accessToken");
+
+    function showPanel(panelId) {
+        // Ẩn dashboard chính
+        document.querySelectorAll(".sub-panel").forEach(p => p.style.display = "none");
+
+        // Hiện panel được chọn
+        document.getElementById(panelId).style.display = "block";
+
+        // Load dữ liệu tương ứng
+        switch (panelId) {
+            case 'clientPanel':
+                loadClientOverview();
+                break;
+            case 'revenuePanel':
+                loadRevenueData();
+                break;
+            case 'servicePanel':
+                loadServiceUsageChart();
+                break;
+            case 'ratingPanel':
+                loadRatingStats();
+                break;
+            
+        }
+    }
+
+    //  // ==================== CLIENT ====================
+    function loadClientOverview() {
+        $.ajax({
+            url: '/admin/StatisticsReports/GetCustomerOverview',
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer " + tokenJWT  // Thêm token JWT nếu cần thiết
+            },
+            success: function (data) {
+                const dto = data.data;
+                const panel = $('#clientPanel');
+                panel.html(`
+                    <div class="stat-boxes">
+                        <div class="stat-box purple">
+                            <div class="info">
+                                <h2>${dto.totalContactRequests}</h2>
+                                <div>Yêu cầu tạo hợp đồng</div>
+                            </div>
+                            <div class="icon">📝</div>
+                        </div>
+                        <div class="stat-box blue">
+                            <div class="info">
+                                <h2>${dto.totalApprovedCompanies}</h2>
+                                <div>Khách hàng đã duyệt</div>
+                            </div>
+                            <div class="icon">✅</div>
+                        </div>
+                        <div class="stat-box green">
+                            <div class="info">
+                                <h2>${dto.activeContracts}</h2>
+                                <div>HĐ đang hoạt động</div>
+                            </div>
+                            <div class="icon">📄</div>
+                        </div>
+                        <div class="stat-box orange">
+                            <div class="info">
+                                <h2>${dto.normalApprovedContracts}</h2>
+                                <div>HĐ loại thường</div>
+                            </div>
+                            <div class="icon">📁</div>
+                        </div>
+                        <div class="stat-box red">
+                            <div class="info">
+                                <h2>${dto.vipApprovedContracts}</h2>
+                                <div>HĐ loại VIP</div>
+                            </div>
+                            <div class="icon">👑</div>
+                        </div>
+                        <div class="stat-box cyan">
+                            <div class="info">
+                                <h2>${dto.expiringContracts}</h2>
+                                <div>HĐ sắp hết hạn</div>
+                            </div>
+                            <div class="icon">⏰</div>
+                        </div>
+                    </div>
+                `);
+            }
+        });
+    }
+
+    // ==================== REVENUE ====================
+    function loadRevenueData() {
+        const selectedYear = document.getElementById("yearSelector").value;
+
+        $.ajax({
+            url: `/admin/StatisticsReports/GetRevenueOverview?year=${selectedYear}`, // ✅ đúng
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer " + tokenJWT
+            },
+            success: function (response) {
+                const data = response.data;
+
+                $('#totalPaid').text(data.totalPaid.toLocaleString('vi-VN') + '₫');
+                $('#successfulTrans').text(data.successfulTransactions);
+                $('#failedTrans').text(data.failedTransactions);
+
+                const ctx = document.getElementById('monthlyRevenueChart').getContext('2d');
+
+                if (revenueChartInstance) {
+                    revenueChartInstance.destroy();
+                }
+
+                revenueChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.monthlyRevenue.map(x => x.month),
+                        datasets: [{
+                            label: 'Doanh thu (₫)',
+                            data: data.monthlyRevenue.map(x => x.amount),
+                            backgroundColor: '#28a745'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: value => value.toLocaleString('vi-VN') + '₫'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    maxRotation: 0,
+                                    minRotation: 0
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+
+    // ==================== SERVICE ====================
+    function loadServiceUsageChart() {
+        $.ajax({
+            url: '/admin/StatisticsReports/GetServiceUsage',
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer " + tokenJWT
+            },
+            success: function (response) {
+                const data = response.data;
+
+                if (!Array.isArray(data)) {
+                    console.error("Dữ liệu dịch vụ không đúng định dạng:", data);
+                    return;
+                }
+
+                const labels = data.map(x => x.serviceTypeName);
+                const counts = data.map(x => x.contractCount);
+
+                const ctx = document.getElementById('serviceUsageChart').getContext('2d');
+
+                // Hủy chart cũ nếu tồn tại
+                if (serviceChartInstance) {
+                    serviceChartInstance.destroy();
+                }
+
+                // 👉 Gán biểu đồ mới vào biến instance
+                serviceChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Số hợp đồng',
+                            data: counts,
+                            backgroundColor: '#17a2b8'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: true }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0,
+                                    stepSize: 1
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    autoSkip: false,
+                                    maxRotation: 45,
+                                    minRotation: 30
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+
+            error: function (xhr) {
+                console.error("Lỗi khi tải thống kê dịch vụ:", xhr.responseText);
+            }
+        });
+    }
+
+    // ==================== RATING ====================
+    function loadRatingStats() {
+        $.ajax({
+            url: '/admin/StatisticsReports/GetReviewStatistics',
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer " + tokenJWT
+            },
+            success: function (data) {
+                const dto = data.data;
+
+                // Biểu đồ thanh ngang: Trung bình sao
+                const barCtx = document.getElementById('ratingBarChart').getContext('2d');
+                if (ratingBarChartInstance) ratingBarChartInstance.destroy();
+
+                ratingBarChartInstance = new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: dto.averageStarsPerCriteria.map(x => x.criteriaName),
+                        datasets: [{
+                            label: 'Trung bình sao',
+                            data: dto.averageStarsPerCriteria.map(x => x.averageStar),
+                            backgroundColor: '#fd7e14'
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', // 👉 Biểu đồ thanh ngang
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                max: 5,
+                                ticks: { stepSize: 1 }
+                            },
+                            y: {
+                                ticks: {
+                                    autoSkip: false
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: true }
+                        }
+                    }
+                });
+
+                // Biểu đồ doughnut: Tỷ lệ mức sao
+                const pieCtx = document.getElementById('starDistributionChart').getContext('2d');
+                if (starChartInstance) starChartInstance.destroy();
+
+                starChartInstance = new Chart(pieCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: dto.starLevelDistribution.map(x => x.starLabel),
+                        datasets: [{
+                            data: dto.starLevelDistribution.map(x => x.count),
+                            backgroundColor: ['#dc3545', '#fd7e14', '#ffc107', '#17a2b8', '#28a745']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            tooltip: { enabled: true },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+</script>
+

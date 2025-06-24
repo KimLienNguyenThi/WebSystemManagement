@@ -14,9 +14,11 @@ public class ChatbotService
         _context = context;
         _client = new HttpClient
         {
-            BaseAddress = new Uri("http://localhost:11434") // Ollama mặc định
+            BaseAddress = new Uri("http://localhost:11434"),
+            Timeout = TimeSpan.FromMinutes(5) 
         };
     }
+
 
     public async Task<string> GetAdviceViaHttpClientAsync(string userMessage)
     {
