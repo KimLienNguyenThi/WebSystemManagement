@@ -568,7 +568,7 @@ namespace WebApi.Service.Admin
         }
 
         //Tính toán thời gian gia hạn
-        public (DateTime newStartDate, DateTime newEndDate, string? originalContract) CalculateNewContractPeriod( ContractDTO contractDTO)
+        public (DateTime newStartDate, DateTime newEndDate, string? originalContract) CalculateNewContractPeriod(ContractDTO contractDTO)
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
@@ -703,9 +703,9 @@ namespace WebApi.Service.Admin
             }
         }
 
-        public async Task<string?> SaveContractUpgrade(CompanyContractDTOs dto,  string id)
+        public async Task<string?> SaveContractUpgrade(CompanyContractDTOs dto, string id)
         {
-            if (dto == null )
+            if (dto == null)
             {
                 return "Dữ liệu không hợp lệ.";
             }
@@ -800,6 +800,30 @@ namespace WebApi.Service.Admin
                     Console.WriteLine($"Lỗi hệ thống: {ex.Message}");
                     return "Lỗi hệ thống, vui lòng thử lại sau.";
                 }
+            }
+        }
+
+        public async Task ExpiredContract()
+        {
+            try
+            {
+                var contractsExpired = await _context.Contracts.Where(item => item.IsActive == true && item.Enddate < DateTime.Now).ToListAsync();
+                if (contractsExpired != null && contractsExpired.Any())
+                {
+                    foreach (var contract in contractsExpired)
+                    {
+                        contract.IsActive = false;
+                        _context.Contracts.Update(contract);
+                        _context.SaveChanges();
+
+                        // Send mail nếu cần
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Lỗi hệ thống: {ex.Message}");
             }
         }
     }

@@ -4,6 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	  <PreserveCompilationContext>true</PreserveCompilationContext>
+	  <MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
+	  <InvariantGlobalization>true</InvariantGlobalization>
+	  <UserSecretsId>39968332-f4bd-4081-a78e-3b9c606ffd3a</UserSecretsId>
+	  <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +29,6 @@
     <None Include="Views\ServiceGuest\Index.cshtml" />
     <None Include="wwwroot\Content2\images\services.svg" />
     <None Include="wwwroot\Content2\js\bootstrap.min.js" />
-    <None Include="wwwroot\Content2\js\google-map.js" />
     <None Include="wwwroot\Content2\js\jquery-migrate-3.0.1.min.js" />
     <None Include="wwwroot\Content2\js\jquery.animateNumber.min.js" />
     <None Include="wwwroot\Content2\js\jquery.easing.1.3.js" />
@@ -2241,7 +2245,9 @@
     <PackageReference Include="EPPlus" Version="7.6.1" />
     <PackageReference Include="itext7" Version="9.2.0" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="9.2.0" />
-    <PackageReference Include="MailKit" Version="4.11.0" />
+	  <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.436" />
+
+	  <PackageReference Include="MailKit" Version="4.11.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
@@ -2251,7 +2257,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.5" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+
+	  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
     <PackageReference Include="OpenAI" Version="2.1.0" />
     <PackageReference Include="QuestPDF" Version="2025.4.4" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.8" />

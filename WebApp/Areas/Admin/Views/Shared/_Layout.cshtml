@@ -10,10 +10,10 @@
     <!-- Google Font: Source Sans Pro -->
     @* <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"> *@
 
-    <link rel="stylesheet" href="~/Content/Assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+@*     <link rel="stylesheet" href="~/Content/Assets/css/style.css">
+ *@    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
 
-    <!-- Font Awesome -->
+    @* <!-- Font Awesome -->
     <link rel="stylesheet" href="~/Content/Clients/plugins/fontawesome-free/css/all.min.css">
     <!-- daterange picker -->
     <link rel="stylesheet" href="~/Content/Clients/plugins/daterangepicker/daterangepicker.css">
@@ -35,7 +35,8 @@
     <link rel="stylesheet" href="~/Content/Clients/plugins/dropzone/min/dropzone.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/Content/Clients/dist/css/adminlte.min.css">
-
+ *@
+    <link rel="stylesheet" href="~/css/bundle_admin.css">
 
     <style>
         .notification {
@@ -102,9 +103,27 @@
             text-overflow: ellipsis;
         }
     </style>
-
 </head>
+@* <style>
+    body, .content-wrapper {
+        height: 100vh; /* Chiều cao 100% của viewport */
+        overflow: hidden; /* Ẩn thanh cuộn */
+    }
 
+    .wrapper {
+        min-height: 100vh; /* Đảm bảo phần wrapper không bị nhỏ hơn chiều cao màn hình */
+    }
+
+    .main-sidebar {
+        height: 100%;
+        overflow-y: auto; /* Cho phép thanh cuộn dọc trong sidebar */
+    }
+
+    .content-wrapper {
+        overflow-y: auto; /* Cho phép thanh cuộn dọc trong phần content */
+    } */
+
+</style> *@
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
         <!-- Navbar -->
@@ -197,7 +216,7 @@
     </div>
     <!-- ./wrapper -->
     <!-- jQuery -->
-    <script src="~/Content/Clients/plugins/jquery/jquery.min.js"></script>
+    @*<script src="~/Content/Clients/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="~/Content/Clients/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Select2 -->
@@ -222,13 +241,13 @@
     <!-- AdminLTE App -->
     <script src="~/Content/Clients/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src="~/Content/Clients/dist/js/demo.js"></script>
+    <script src="~/Content/Clients/dist/js/demo.js"></script>*@
 
     @*<link href="https://nightly.datatables.net/css/dataTables.dataTables.min.css" rel="stylesheet" type="text/css" />
     <script src="https://nightly.datatables.net/js/dataTables.min.js"></script>*@
 
 
-
+    <script src="~/js/bundle_admin.js"></script>
     <link href="https://cdn.datatables.net/v/bs4/dt-2.0.5/datatables.min.css" rel="stylesheet">
 
     <script src="https://cdn.datatables.net/v/bs4/dt-2.0.5/datatables.min.js"></script>

@@ -13,6 +13,10 @@ using WebApi.Service.Client;
 using WebApi.Service.Introduce;
 using WebApi.Configs;
 using System;
+using WebApi.Service.Job;
+using Quartz.Impl;
+using Quartz.Spi;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +28,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<ApiConfigs>(builder.Configuration.GetSection("ApiConfigs"));
+
+builder.Services.Configure<JobSettings>(builder.Configuration.GetSection("JobSettings"));
 
 // Đăng ký DbContext
 builder.Services.AddDbContext<ManagementDbContext>(options =>
@@ -187,6 +193,14 @@ builder.Services.AddTransient<ServiceGuest>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 
 builder.Services.AddTransient<IPaymentService, PaymentService>();
+
+//add schedule jobs
+builder.Services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+builder.Services.AddSingleton<IJobFactory, JobFactory>();
+
+//add tasks
+builder.Services.AddSingleton<ExpiredContractJob>();
+builder.Services.AddHostedService<TaskSchedular>();
 
 builder.Services.AddMemoryCache(); // Cho IMemoryCache
 

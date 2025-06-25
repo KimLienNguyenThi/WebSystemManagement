@@ -2,6 +2,16 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using WebApp.Configs;
+using iText.Layout.Element;
+using iText.Forms.Form.Element;
+using iText.Kernel.Utils;
+using iText.Layout;
+using iText.StyledXmlParser.Jsoup.Select;
+using Org.BouncyCastle.Bcpg;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.CodeAnalysis.Scripting;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,6 +92,69 @@ builder.Services.AddSession(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+});
+
+builder.Services.AddWebOptimizer(pipeline =>
+{
+    pipeline.AddJavaScriptBundle("/js/bundle.js", "Content2/js/jquery.min.js",
+        "Content2/js/jquery-migrate-3.0.1.min.js",
+        "Content2/js/bootstrap.min.js",
+        "Content2/js/jquery.animateNumber.min.js",
+        "Content2/js/jquery.easing.1.3.js",
+        "Content2/js/jquery.magnific-popup.min.js",
+        "Content2/js/jquery.stellar.min.js",
+        "Content2/js/jquery.waypoints.min.js",
+        "Content2/js/main.js",
+        "Content2/js/owl.carousel.min.js",
+        "Content2/js/popper.min.js",
+        "Content2/js/scrollax.min.js",
+        "Content2/js/main_1.js"
+        );
+
+    pipeline.AddCssBundle("/css/bundle.css",
+        "Content2/css/animate.css",
+        "Content2/css/owl.carousel.min.css",
+        "Content2/css/owl.theme.default.min.css",
+        "Content2/css/magnific-popup.css",
+        "Content2/css/flaticon.css",
+        "Content2/css/style.css"
+        );
+
+    pipeline.AddJavaScriptBundle("/js/bundle_admin.js",
+        "Content/Clients/plugins/jquery/jquery.min.js",
+       "Content/Clients/plugins/bootstrap/js/bootstrap.bundle.min.js",
+       "Content/Clients/plugins/select2/js/select2.full.min.js",
+       "Content/Clients/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js",
+       "Content/Clients/plugins/moment/moment.min.js",
+       "Content/Clients/plugins/inputmask/jquery.inputmask.min.js",
+       "Content/Clients/plugins/daterangepicker/daterangepicker.js",
+       "Content/Clients/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js",
+       "Content/Clients/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js",
+       "Content/Clients/plugins/bootstrap-switch/js/bootstrap-switch.min.js",
+       "Content/Clients/plugins/bs-stepper/js/bs-stepper.min.js",
+       "Content/Clients/plugins/dropzone/min/dropzone.min.js",
+       "Content/Clients/dist/js/adminlte.min.js",
+       "Content/Clients/dist/js/demo.js"
+       );
+
+    pipeline.AddCssBundle("/css/bundle_admin.css",
+       "Content/Clients/plugins/fontawesome-free/css/all.min.css",
+       "Content/Clients/plugins/daterangepicker/daterangepicker.css",
+       "Content/Clients/plugins/icheck-bootstrap/icheck-bootstrap.min.css",
+       "Content/Clients/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css",
+       "Content/Clients/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css",
+       "Content/Clients/plugins/select2/css/select2.min.css",
+       "Content/Clients/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css",
+       "Content/Clients/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css",
+       "Content/Clients/plugins/bs-stepper/css/bs-stepper.min.css",
+       "Content/Clients/plugins/dropzone/min/dropzone.min.css",
+       "Content/Clients/dist/css/adminlte.min.css"
+       );
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -95,6 +168,16 @@ if (!app.Environment.IsDevelopment())
 app.UseSession();
 
 app.UseHttpsRedirection();
+
+app.UseWebOptimizer();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=31536000");
+    }
+});
 app.UseStaticFiles();
 
 app.UseRouting();
