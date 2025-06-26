@@ -47,7 +47,7 @@
     {
         public int Page { get; set; }
         public int PageSize { get; set; }
-        public string Cutomer { get; set; }
+        public string Customer { get; set; }
         public string Contractnumber { get; set; }
     }
 
@@ -55,7 +55,7 @@
     {
         public int Page { get; set; }
         public int PageSize { get; set; }
-        public string Cutomer { get; set; }
+        public string Customer { get; set; }
     }
 
     public class Requirement_C

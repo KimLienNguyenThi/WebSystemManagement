@@ -87,13 +87,7 @@ namespace WebApp.Areas.Admin.Controllers
                     return BadRequest(new { success = false, message = apiResponse?.Message ?? "Sai tên đăng nhập hoặc mật khẩu." });
                 }
 
-                //// Gán quyền
-                //string role = apiResponse.Data.Staffphone switch
-                //{
-                //    "0123654789" => "QuanLy",
-                //    "0365812847" => "Admin",
-                //    _ => "User"
-                //};
+               
 
                 var claims = new List<Claim>
                 {

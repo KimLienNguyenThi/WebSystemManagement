@@ -16,14 +16,14 @@ namespace WebApp.Areas.Admin.Controllers
         [AuthorizeToken]
         public IActionResult Index()
         {
-            if (User.IsInRole("Admin"))
-            {
-                return RedirectToAction("Index", "phanquyen");
-            }
-            else
-            {
-                return View();
-            }
+            //if (User.IsInRole("Admin"))
+            //{
+            //    return RedirectToAction("Index", "phanquyen");
+            //}
+            //else
+            //{
+               return View();
+            //}
         }
 
        

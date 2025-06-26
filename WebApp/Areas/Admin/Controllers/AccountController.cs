@@ -43,28 +43,28 @@ namespace WebApp.Areas.Admin.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            if (User.IsInRole("HanhChinh") || User.IsInRole("KyThuat"))
-            {
-                return RedirectToAction("Index", "phanquyen");
-            }
-            else
-            {
+            //if (User.IsInRole("HanhChinh") || User.IsInRole("KyThuat"))
+            //{
+            //    return RedirectToAction("Index", "phanquyen");
+            //}
+            //else
+            //{
                 return View();
-            }
+            //}
         }
 
         [AuthorizeToken]
         [Route("ContractApproval")]
         public IActionResult ContractApproval()
         {
-            if (User.IsInRole("HanhChinh") || User.IsInRole("KyThuat"))
-            {
-                return RedirectToAction("Index", "phanquyen");
-            }
-            else
-            {
-                return View();
-            }
+            //if (User.IsInRole("HanhChinh") || User.IsInRole("KyThuat"))
+            //{
+            //    return RedirectToAction("Index", "phanquyen");
+            //}
+            //else
+            //{
+             return View();
+            //}
         }
 
         [HttpPost]

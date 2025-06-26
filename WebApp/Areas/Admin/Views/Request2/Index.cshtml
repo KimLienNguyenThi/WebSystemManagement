@@ -2,7 +2,7 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 <style>
-   
+
     .hidden {
         display: none !important;
     }
@@ -10,6 +10,7 @@
     .flex-shrink-0 {
         height: 60px;
     }
+
     #createrequestBtn {
         width: 200px !important; /* Điều chỉnh chiều rộng */
         padding-left: 8px !important;
@@ -21,11 +22,11 @@
         padding-left: 8px !important;
         padding-right: 8px !important;
     }
-    
+
     /* #reqStatus{
-        font-size: large; 
-        width: 250px;
-    } */
+            font-size: large;
+            width: 250px;
+        } */
 
     #listRe {
         margin-top: 0 !important; /* Giảm lề trên */
@@ -34,55 +35,55 @@
         font-size: 14px; /* Cỡ chữ hợp lý */
         line-height: 1.4; /* Giảm chiều cao dòng */
     }
-    /* Đảm bảo mỗi ô có độ rộng hợp lý */
-    #listRe th, #listRe td {
-        padding: 5px 10px; /* Giảm khoảng cách giữa các ô */
-        text-align: left;
-        vertical-align: bottom; /* Đặt căn chỉnh dọc cho các ô, thay từ middle sang bottom */
-        border: 1px solid #e3e3e3;
-        white-space: nowrap; /* Ngăn không cho văn bản xuống dòng */
-        overflow: hidden;
-        text-overflow: ellipsis; /* Cắt văn bản dài nếu không đủ không gian */
-        word-wrap: break-word; /* Cho phép bẻ dòng trong các ô dài mà không bị tràn */
-    }
+        /* Đảm bảo mỗi ô có độ rộng hợp lý */
+        #listRe th, #listRe td {
+            padding: 5px 10px; /* Giảm khoảng cách giữa các ô */
+            text-align: left;
+            vertical-align: bottom; /* Đặt căn chỉnh dọc cho các ô, thay từ middle sang bottom */
+            border: 1px solid #e3e3e3;
+            white-space: nowrap; /* Ngăn không cho văn bản xuống dòng */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Cắt văn bản dài nếu không đủ không gian */
+            word-wrap: break-word; /* Cho phép bẻ dòng trong các ô dài mà không bị tràn */
+        }
 
 
-    /* Cải thiện giao diện bảng khi có nội dung dài */
-    #listRe tbody tr {
-        word-wrap: break-word; /* Cho phép bẻ dòng trong các ô dài */
-    }
+        /* Cải thiện giao diện bảng khi có nội dung dài */
+        #listRe tbody tr {
+            word-wrap: break-word; /* Cho phép bẻ dòng trong các ô dài */
+        }
 
+            #listRe tbody tr:hover {
+                background-color: #f9f9f9;
+                cursor: pointer;
+            }
+
+        /* Giảm khoảng cách giữa dòng tiêu đề và các hàng dữ liệu */
+        #listRe th {
+            padding-top: 3px; /* Giảm khoảng cách trên tiêu đề */
+            padding-bottom: 3px; /* Giảm khoảng cách dưới tiêu đề */
+            text-align: center; /* Căn giữa văn bản tiêu đề */
+            background-color: #f1f1f1; /* Đặt màu nền cho tiêu đề */
+            font-weight: bold; /* Làm đậm các tiêu đề */
+        }
+
+        /* Các phần tử trong bảng có thể điều chỉnh theo nhu cầu */
+        #listRe td {
+            font-size: 14px;
+        }
+
+        /* Thêm hiệu ứng hover cho các hàng trong bảng */
         #listRe tbody tr:hover {
-            background-color: #f9f9f9;
+            background-color: #e7e7e7;
             cursor: pointer;
         }
 
-    /* Giảm khoảng cách giữa dòng tiêu đề và các hàng dữ liệu */
-    #listRe th {
-        padding-top: 3px; /* Giảm khoảng cách trên tiêu đề */
-        padding-bottom: 3px; /* Giảm khoảng cách dưới tiêu đề */
-        text-align: center; /* Căn giữa văn bản tiêu đề */
-        background-color: #f1f1f1; /* Đặt màu nền cho tiêu đề */
-        font-weight: bold; /* Làm đậm các tiêu đề */
-    }
-
-    /* Các phần tử trong bảng có thể điều chỉnh theo nhu cầu */
-    #listRe td {
-        font-size: 14px;
-    }
-
-    /* Thêm hiệu ứng hover cho các hàng trong bảng */
-    #listRe tbody tr:hover {
-        background-color: #e7e7e7;
-        cursor: pointer;
-    }
-
-    /* Đảm bảo không bị tràn khi có văn bản dài */
-    #listRe td {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
+        /* Đảm bảo không bị tràn khi có văn bản dài */
+        #listRe td {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
 
     .card-body {
         padding-top: 5px;
@@ -98,16 +99,16 @@
         padding: 15px;
     }
 
-    .status-bar::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: #ccc;
-        z-index: 0;
-    }
+        .status-bar::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ccc;
+            z-index: 0;
+        }
 
     .status-column {
         display: flex;
@@ -117,9 +118,9 @@
         z-index: 1;
     }
 
-    .status-column.alt {
-        flex-direction: column-reverse;
-    }
+        .status-column.alt {
+            flex-direction: column-reverse;
+        }
 
     .status-time,
     .status-content {
@@ -140,10 +141,10 @@
     .status-dot {
         width: 12px;
         height: 12px;
-       /*  background-color: green; */
+        /*  background-color: green; */
         border-radius: 50%;
         border: 2px solid white;
-       /*  box-shadow: 0 0 0 2px green; */
+        /*  box-shadow: 0 0 0 2px green; */
         box-shadow: 0 0 0 2px gray; /* màu mặc định */
         background-color: gray; /* màu mặc định */
         transition: all 0.3s ease;
@@ -158,13 +159,13 @@
             background-color: red;
             box-shadow: 0 0 0 2px red;
         }
-    #detailRequestContainer{
+
+    #detailRequestContainer {
         height: 85vh;
         height: 85%;
     }
 
-    #expiredNotice
-    {
+    #expiredNotice {
         padding: 5px;
         margin-top: 10px;
     }
@@ -178,11 +179,11 @@
 </style>
 <body>
     <div id="listRequestContainer" class="container-fluid d-flex flex-column vh-100">
-        <div class="row flex-shrink-0" >
+        <div class="row flex-shrink-0">
             <div class="col-12">
                 <div class="card p-2">
                     <form class="d-flex align-items-center w-100" style="gap: 10px;">
-                        <button id="createrequestBtn" class="btn btn-danger btn-sm  px-3" >
+                        <button id="createrequestBtn" class="btn btn-danger btn-sm  px-3">
                             👤 Tạo yêu cầu
                         </button>
                     </form>
@@ -256,8 +257,9 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th>Chọn</th>
-@*                                      <th>Mã khách hàng</th>
- *@                                     <th>Tên công ty</th>
+                                        @*                                      <th>Mã khách hàng</th>
+                                        *@
+                                        <th>Tên công ty</th>
                                         <th>Mã hợp đồng</th>
                                         <th>Loại dịch vụ</th>
                                     </tr>
@@ -356,9 +358,9 @@
             </div>
         </div>
     </div>
-@*     thẻ div 3 *@    
+    @*     thẻ div 3 *@
     <div id="detailRequestContainer" class="container-fluid d-flex flex-column vh-100" style="display: none;">
-        <div class="row flex-shrink-0" >
+        <div class="row flex-shrink-0">
             <div class="col-12">
                 <div class="card p-2">
                     <form class="d-flex align-items-center w-100" style="gap: 10px;">
@@ -440,7 +442,7 @@
                         <div class="form-group d-flex align-items-center">
                             <label class="w-25">Trạng thái hỗ trợ:</label>
                             <select id="reqStatus" class="form-control w-75">
-                                <option value="0">Yêu cầu hỗ trợ</option> 
+                                <option value="0">Yêu cầu hỗ trợ</option>
                                 <option value="1">Yêu cầu chấp nhận</option>
                                 <option value="2">Đang xử lý</option>
                                 <option value="3">Hỗ trợ hoàn tất</option>
@@ -651,6 +653,7 @@
     $(document).ready(function () {
         init();
     });
+    var Department = "@User.FindFirst("Department")?.Value";
 
     function init() {
         if ($.fn.DataTable.isDataTable("#listRe")) {
@@ -676,7 +679,7 @@
                 }
             },
             ajax: {
-                url: "/admin/request/GetAllRequest",
+                url: `/admin/Request2/GetAllRequest?depart=${Department}`,
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -746,13 +749,13 @@
                     width: "10%",
                     render: function (data, type, row) {
                         return `
-            <div class="text-center">
-                <i id="btnDetail" class="fa-solid fa-clipboard-list text-primary detail-btn"
-                   style="cursor: pointer; font-size: 1.4rem; transition: 0.3s;"
-                   title="Xem & Cập nhật"
-                   data-id="${row.requirementsId}">
-                </i>
-            </div>`;
+                <div class="text-center">
+                    <i id="btnDetail" class="fa-solid fa-clipboard-list text-primary detail-btn"
+                       style="cursor: pointer; font-size: 1.4rem; transition: 0.3s;"
+                       title="Xem & Cập nhật"
+                       data-id="${row.requirementsId}">
+                    </i>
+                </div>`;
                     }
                 }
 
@@ -778,7 +781,7 @@
             // <td>${company.customerId}</td>
 
             $.ajax({
-                url: `/admin/request/GetAllInfor?customerID=${cusid}`,
+                url: `/admin/Request2/GetAllInfor?customerID=${cusid}`,
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {
@@ -788,15 +791,15 @@
 
                         res.listRequest.forEach(function (company, index) {
                             var row = `<tr>
-                                <td>
-                                    <input type="radio" name="selectedCompany" value="${index}" ${index === 0 ? "checked" : ""}>
-                                </td>
+                                    <td>
+                                        <input type="radio" name="selectedCompany" value="${index}" ${index === 0 ? "checked" : ""}>
+                                    </td>
 
-                                <td>${company.companyName}</td>
-                                <td>${company.contractNumber}</td>
-                                <td>${company.serviceType}</td>
+                                    <td>${company.companyName}</td>
+                                    <td>${company.contractNumber}</td>
+                                    <td>${company.serviceType}</td>
 
-                            </tr>`;
+                                </tr>`;
                             tbody.append(row);
                         });
 
@@ -823,7 +826,7 @@
             var selectedIndex = $("input[name='selectedCompany']:checked").val();
             if (selectedIndex !== undefined) {
                 $.ajax({
-                    url: `/admin/request/GetAllInfor?customerID=${$("#searchInput").val().trim()}`,
+                    url: `/admin/Request2/GetAllInfor?customerID=${$("#searchInput").val().trim()}`,
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
                     success: function (res) {
@@ -857,7 +860,7 @@
             }
         });
     });
-    
+
     function formatDateTime(isoString) {
         const date = new Date(isoString);
         const day = String(date.getDate()).padStart(2, '0');
@@ -871,7 +874,7 @@
 
     function getHis(requirementsID) {
         $.ajax({
-            url: `/admin/request/getHIS?requestID=${requirementsID}`,
+            url: `/admin/Request2/getHIS?requestID=${requirementsID}`,
             type: "GET",
             contentType: "application/json; charset=utf-8",
             success: function (res) {
@@ -949,7 +952,7 @@
     function getRequestByID(requirementsID) {
 
         $.ajax({
-            url: `/admin/request/GetRequestByID?requestID=${requirementsID}`,
+            url: `/admin/Request2/GetRequestByID?requestID=${requirementsID}`,
             type: "GET",
             contentType: "application/json; charset=utf-8",
             success: function (res) {
@@ -957,7 +960,7 @@
 
                 if (res.success && Array.isArray(res.listRequest) && res.listRequest.length > 0) {
                     var company = res.listRequest[0]; // Lấy phần tử đầu tiên
-                    
+
                     // Gán dữ liệu vào form thông tin công ty
                     $("#contractNumber2").val(company.contractNumber || "");
                     $("#serviceType2").val(company.serviceType || "");
@@ -965,7 +968,7 @@
                     $("#reqID2").val(company.requirementsId || "");
                     $("#Support2").val(company.support || "");
                     $("#assign").val(company.department || "");
-                   
+
                     // Gán dữ liệu vào form thông tin tài khoản root
                     $("#aName2").val(company.rootName || "");
                     $("#aPhone2").val(company.rPhoneNumber || "");
@@ -981,7 +984,7 @@
                         "3": "Hỗ trợ hoàn tất",
                         "4": "Trì hoãn",
                         "5": "Đóng/Hủy"
-                    }; 
+                    };
 
                     // Lấy value tương ứng từ map
                     var statusValue = company.requirementsStatus?.toString() || "";
@@ -999,10 +1002,10 @@
                                 // Đã đánh giá => hiển thị nút "Xem đánh giá"
                                 if ($("#viewReviewButton").length === 0) {
                                     $("#buttonArea").append(`
-                                    <button id="viewReviewButton" type="button" class="btn btn-info viewReviewButton" data-id="${company.requirementsId}">
-                                        Xem đánh giá
-                                    </button>
-                                `);
+                                        <button id="viewReviewButton" type="button" class="btn btn-info viewReviewButton" data-id="${company.requirementsId}">
+                                            Xem đánh giá
+                                        </button>
+                                    `);
                                 } else {
                                     // Cập nhật lại data-id nếu nút đã tồn tại
                                     $("#viewReviewButton").data("id", company.requirementsId);
@@ -1016,7 +1019,7 @@
                             $("#viewReviewButton").remove(); // Xoá nếu có nút cũ
                         }
 
-                        return; 
+                        return;
                     }
 
                     // Nếu tìm thấy giá trị phù hợp thì gán
@@ -1027,7 +1030,7 @@
                     } else {
                         console.warn("Không tìm thấy trạng thái:", company.requirementsStatus);
                     }
-                    
+
                     // 🔍 Kiểm tra ngày kết thúc và trạng thái hoạt động
                     var endDate = new Date(company.enddate);
                     var today = new Date();
@@ -1064,7 +1067,7 @@
                 });
             }
         });
-       
+
     }
     const tokenJWT = localStorage.getItem("accessToken");
 
@@ -1088,7 +1091,7 @@
             });
             return;
         }
-        if (!customerId || !contractNumber ) {
+        if (!customerId || !contractNumber) {
             showErrorModal("Vui lòng chọn khách hàng cần tạo yêu cầu.");
             // Gán sự kiện đóng modal vào nút "Đóng"
             document.getElementById("btnCloseModal").addEventListener("click", function () {
@@ -1102,7 +1105,7 @@
             RequirementsStatus: requirementsStatus,
             DateOfRequest: dateOfRequest,
             DescriptionOfRequest: descriptionOfRequest,
-            ContractNumber: contractNumber, 
+            ContractNumber: contractNumber,
             CustomerId: customerId
         };
         var StaffId = "@User.FindFirst("StaffId")?.Value";
@@ -1114,7 +1117,7 @@
         $("#confirmButton1").off("click").on("click", function () {
             modal.hide();
             $.ajax({
-                url: `/admin/request/Insert?id=${StaffId}`,
+                url: `/admin/Request2/Insert?id=${StaffId}`,
                 type: 'POST',
                 headers: {
                     "Authorization": "Bearer " + tokenJWT
@@ -1159,7 +1162,7 @@
     function updateStatus(event) {
         event.preventDefault(); // Ngăn chặn load lại trang nếu là <button>
         console.log("Gọi updateStatus()"); // Kiểm tra xem hàm có được gọi không
-       // Lấy giá trị từ input
+        // Lấy giá trị từ input
         var reqID = $("#reqID2").val().trim();
         var reqStatusValue = parseInt(document.getElementById("reqStatus").value); // ✅ Lấy value dạng số nguyên
         console.log("reqStatus (int):", reqStatusValue);
@@ -1233,7 +1236,7 @@
             Apterstatus: reqStatusValue,
             Staffid: StaffId
         };
-            
+
         // Hiển thị modal xác nhận
         document.getElementById("contentModalConfirm").innerHTML = "Bạn có chắc muốn cập nhật trạng thái không?";
         const modalConfirm = new bootstrap.Modal(document.getElementById("confirmModal"));
@@ -1244,7 +1247,7 @@
             modalConfirm.hide(); // Đóng modal xác nhận
 
             $.ajax({
-                url: "/admin/request/UpdateStatus",
+                url: "/admin/Request2/UpdateStatus",
                 type: "Post",
                 headers: {
                     "Authorization": "Bearer " + tokenJWT
@@ -1320,7 +1323,7 @@
         const requirementId = $(this).data('id');
         e.preventDefault(); // Ngăn load trang
         $.ajax({
-            url: `/admin/request/GetViewReview?query=${requirementId}`,
+            url: `/admin/Request2/GetViewReview?query=${requirementId}`,
 
             method: 'GET',
             headers: {
@@ -1342,11 +1345,11 @@
                         }
 
                         $('#ratingFields').append(`
-                                <div class="mb-3">
-                                    <label><strong>${q.label}</strong> <small>(${q.desc})</small></label><br/>
-                                    ${starsHtml}
-                                </div>
-                            `);
+                                    <div class="mb-3">
+                                        <label><strong>${q.label}</strong> <small>(${q.desc})</small></label><br/>
+                                        ${starsHtml}
+                                    </div>
+                                `);
                     });
                     // Gán comment
                     $('#evaluateComment').val(data.comment || '').prop('disabled', true);
@@ -1366,4 +1369,4 @@
         $('#evaluateComment').val('').prop('disabled', false); // giữ nguyên ✅
     });
 
- </script>
+</script>

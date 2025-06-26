@@ -1,12 +1,52 @@
-﻿<div class="sidebar" id="sidebar" style="font-size:20px; line-height:1.7">
+﻿@using Microsoft.AspNetCore.Html
+@functions {
+    public IHtmlContent RenderMenu(string allowedRoles, string href, string iconClass, string text, string userDepartment)
+    {
+        var roles = allowedRoles.Split(',');
+        if (roles.Contains(userDepartment) || allowedRoles.Contains("All"))
+        {
+            var html = $@"
+<li class='nav-item'>
+    <a href='{Url.Content(href)}' class='nav-link'>
+        <i class='nav-icon {iconClass}'></i>
+        <p>{text}</p>
+    </a>
+</li>";
+            return new HtmlString(html);
+        }
+        return HtmlString.Empty;
+    }
+}
+
+
+<div class="sidebar" id="sidebar" style="font-size:20px; line-height:1.7">
+    @{
+        var department = User.FindFirst("Department")?.Value ?? "";
+    }
+
     <!-- Sidebar Menu -->
     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            @Html.Raw(RenderMenu("All", "~/admin/homeadmin/Index", "fas fa-tachometer-alt", "Trang chủ", department))
+            @Html.Raw(RenderMenu("Admin,Director", "~/admin/Account", "fas fa-address-book", "Tạo hợp đồng", department))
+            @Html.Raw(RenderMenu("Admin, Director", "~/admin/ContractsManagement", "fas fa-file-contract", "Quản lý hợp đồng", department))
+            @Html.Raw(RenderMenu("Admin,Director", "~/admin/Account/ContractApproval", "fas fa-check-circle", "Duyệt hợp đồng", department))
+            @Html.Raw(RenderMenu("Admin,Director", "~/admin/Transaction", "fas fa-credit-card", "Quản lý giao dịch", department))
+            @Html.Raw(RenderMenu("Admin,Director", "~/admin/request", "fas fa-clipboard-list", "Quản lý yêu cầu", department))
 
-            <!-- Trang chủ -->
+            @Html.Raw(RenderMenu("HanhChinh,KyThuat", "~/admin/request2", "fas fa-clipboard-list", "Quản lý yêu cầu", department))
+
+            @Html.Raw(RenderMenu("Admin,Director", "~/admin/contact", "fas fa-inbox", "Quản lý liên hệ", department))
+            @Html.Raw(RenderMenu("Admin,Director", "~/admin/StatisticsReports", "fas fa-chart-pie", "Thống kê - Báo cáo", department))
+            @Html.Raw(RenderMenu("All", "~/admin/regulations", "fas fa-tags", "Bảng giá & Ưu đãi", department))
+            @Html.Raw(RenderMenu("Admin,Director", "~/admin/staff", "fas fa-users-cog", "Nhân viên", department))
+
+
+
+
+            @* <!-- Trang chủ -->
             <li class="nav-item">
                 <a href="~/admin/homeadmin/Index" class="nav-link">
-                    @* active *@
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
                         Trang chủ
@@ -88,7 +128,7 @@
                         Nhân viên
                     </p>
                 </a>
-            </li>
+            </li> *@
 
         </ul>
     </nav>

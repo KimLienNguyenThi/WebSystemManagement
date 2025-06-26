@@ -167,6 +167,8 @@ builder.Services.AddTransient<RequirementService>();
 builder.Services.AddTransient<RequestService>();
 builder.Services.AddTransient<EmailService>();
 builder.Services.AddTransient<RegulationsService>();
+builder.Services.AddTransient<Request2Service>();
+
 builder.Services.AddTransient<AccountService>();
 builder.Services.AddTransient<ContractsManagementService>();
 

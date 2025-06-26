@@ -233,7 +233,7 @@ namespace WebApi.Service.Client
                          join h in _context.Historyreqs on r.Requirementsid equals h.Requirementsid into historyJoin
                          from h in historyJoin.DefaultIfEmpty() // Left Join
 
-                         where c.Customerid == req.Cutomer && b.Contractnumber == req.Contractnumber
+                         where c.Customerid == req.Customer && b.Contractnumber == req.Contractnumber
                          select new Requirement_Company1
                          {
                              RequirementsId = r.Requirementsid,

@@ -11,15 +11,15 @@ using WebApp.DTO;
 namespace WebApp.Areas.Admin.Controllers
 {
     [Area("admin")]
-    [Route("admin/request")]
+    [Route("admin/request2")]
     [Authorize(AuthenticationSchemes = "AdminCookie")]
 
-    public class RequestController : Controller
+    public class Request2Controller : Controller
     {
         private readonly HttpClient _client;
         private readonly ApiConfigs _apiConfigs;
 
-        public RequestController(IOptions<ApiConfigs> apiConfigs)
+        public Request2Controller(IOptions<ApiConfigs> apiConfigs)
         {
             _client = new HttpClient();
             _apiConfigs = apiConfigs.Value;
@@ -46,7 +46,7 @@ namespace WebApp.Areas.Admin.Controllers
 
         [HttpPost]
         [Route("GetAllRequest")]
-        public async Task<IActionResult> GetAllRequest([FromBody] GetListReqad req)
+        public async Task<IActionResult> GetAllRequest([FromBody] GetListReqad req, [FromQuery] string depart)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace WebApp.Areas.Admin.Controllers
                 var reqjson = JsonConvert.SerializeObject(req);
                 var httpContent = new StringContent(reqjson, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await _client.PostAsync(_apiConfigs.BaseApiUrl + "/admin/Request/GetAllRequest", httpContent);
+                HttpResponseMessage response = await _client.PostAsync(_apiConfigs.BaseApiUrl + $"/admin/Request2/GetAllRequest?depart={depart}", httpContent);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -82,7 +82,7 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 List<CompanyAccountDTO> listRequest = new List<CompanyAccountDTO>();
 
-                HttpResponseMessage response = await _client.GetAsync(_apiConfigs.BaseApiUrl + $"/admin/Request/GetAllInfor?req={customerID}");
+                HttpResponseMessage response = await _client.GetAsync(_apiConfigs.BaseApiUrl + $"/admin/Request2/GetAllInfor?req={customerID}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -131,7 +131,7 @@ namespace WebApp.Areas.Admin.Controllers
                 // Gửi request với token
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                var response = await _client.PostAsync(_apiConfigs.BaseApiUrl + $"/admin/Request/Insert?id={id}", jsonContent);
+                var response = await _client.PostAsync(_apiConfigs.BaseApiUrl + $"/admin/Request2/Insert?id={id}", jsonContent);
 
                 var result = await response.Content.ReadAsStringAsync();
                 var apiResponse = JsonConvert.DeserializeObject<JObject>(result);
@@ -164,7 +164,7 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 List<Requirement_Company> listRequest = new List<Requirement_Company>();
 
-                HttpResponseMessage response = await _client.GetAsync(_apiConfigs.BaseApiUrl + $"/admin/Request/GetRequestByID?req={requestID}");
+                HttpResponseMessage response = await _client.GetAsync(_apiConfigs.BaseApiUrl + $"/admin/Request2/GetRequestByID?req={requestID}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -201,7 +201,7 @@ namespace WebApp.Areas.Admin.Controllers
                 var reqjson = JsonConvert.SerializeObject(historyReq);
                 var httpContent = new StringContent(reqjson, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await _client.PutAsync(_apiConfigs.BaseApiUrl + "/admin/Request/UpdateStatus", httpContent);
+                HttpResponseMessage response = await _client.PutAsync(_apiConfigs.BaseApiUrl + "/admin/Request2/UpdateStatus", httpContent);
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 if (response.IsSuccessStatusCode)
@@ -257,7 +257,7 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 List<HistoryRequests> listRequest = new List<HistoryRequests>();
 
-                HttpResponseMessage response = await _client.GetAsync(_apiConfigs.BaseApiUrl + $"/admin/Request/getHIS?req={requestID}");
+                HttpResponseMessage response = await _client.GetAsync(_apiConfigs.BaseApiUrl + $"/admin/Request2/getHIS?req={requestID}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -295,7 +295,7 @@ namespace WebApp.Areas.Admin.Controllers
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 List<ReviewDTO> listHis = new List<ReviewDTO>();
-                HttpResponseMessage response = await _client.GetAsync(_apiConfigs.BaseApiUrl + $"/admin/Request/GetViewReview?query={query}");
+                HttpResponseMessage response = await _client.GetAsync(_apiConfigs.BaseApiUrl + $"/admin/Request2/GetViewReview?query={query}");
                 if (response.IsSuccessStatusCode)
                 {
                     var reponseData = await response.Content.ReadAsStringAsync();

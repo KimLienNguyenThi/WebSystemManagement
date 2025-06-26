@@ -31,14 +31,14 @@ namespace WebApp.Areas.Admin.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            if (User.IsInRole("HanhChinh") || User.IsInRole("KyThuat"))
-            {
-                return RedirectToAction("Index", "phanquyen");
-            }
-            else
-            {
-                return View();
-            }
+            //if (User.IsInRole("HanhChinh") || User.IsInRole("KyThuat"))
+            //{
+            //    return RedirectToAction("Index", "phanquyen");
+            //}
+            //else
+            //{
+               return View();
+            //}
         }
 
         //Lấy thông tin công ty chính thức
