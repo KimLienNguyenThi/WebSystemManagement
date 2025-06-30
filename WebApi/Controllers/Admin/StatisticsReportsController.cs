@@ -49,6 +49,11 @@ namespace WebApi.Controllers.Admin
             var result = await _reportsService.GetReviewStatistics();
             return Ok(result);
         }
-
+        [HttpGet]
+        public async Task<ActionResult<List<ReviewOverviewDTO>>> GetLoyalCustomers()
+        {
+            var result = await _reportsService.GetLoyalCustomers();
+            return Ok(result);
+        }
     }
 }

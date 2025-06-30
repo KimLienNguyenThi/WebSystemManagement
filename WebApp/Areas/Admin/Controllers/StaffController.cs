@@ -26,7 +26,9 @@ namespace WebApp.Areas.Admin.Controllers
             _apiConfigs = apiConfigs.Value;
         }
 
-        [AuthorizeToken]
+        //[AuthorizeToken]
+        [AllowAnonymous]
+
         [Route("")]
         public IActionResult Index()
         {
@@ -36,7 +38,14 @@ namespace WebApp.Areas.Admin.Controllers
             //}
             //else
             //{
-                return View();
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                if (HttpContext.Request.Path.Value.Contains("/admin/LoginAdmin/Login", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Redirect("/admin/homeadmin/index");
+                }
+            }
+            return View();
             //}
         }
         [HttpGet]

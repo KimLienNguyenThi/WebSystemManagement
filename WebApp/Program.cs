@@ -1,17 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using WebApp.Configs;
-using iText.Layout.Element;
-using iText.Forms.Form.Element;
-using iText.Kernel.Utils;
-using iText.Layout;
-using iText.StyledXmlParser.Jsoup.Select;
-using Org.BouncyCastle.Bcpg;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.CodeAnalysis.Scripting;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Diagnostics;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +18,9 @@ builder.Services.AddSingleton(sp =>
 // thêm dịch vụ authentication
 builder.Services.AddAuthentication(option =>
 {
-    option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    option.DefaultScheme = "AdminCookie";
+
+    //option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     option.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 })
     .AddCookie("User", option =>
@@ -37,13 +29,17 @@ builder.Services.AddAuthentication(option =>
     })
 
 
-    .AddCookie("AdminCookie", options =>
-    {
-        options.LoginPath = "/admin/LoginAdmin/Login"; // Đường dẫn khi admin chưa đăng nhập
-        options.AccessDeniedPath = "/admin/phanquyen/Index"; // Đường dẫn khi admin không có quyền truy cập
-        options.Cookie.Name = "AdminAuthCookie"; // Tên của cookie dành cho admin
-    });
-
+   .AddCookie("AdminCookie", options =>
+   {
+       options.LoginPath = "/admin/LoginAdmin/Login";
+       options.AccessDeniedPath = "/admin/phanquyen/index";
+       options.Cookie.Name = "AdminCookie";
+       options.Cookie.SecurePolicy = CookieSecurePolicy.None;  // ✅ Đừng để là Always nếu chạy HTTP
+       options.Cookie.SameSite = SameSiteMode.Lax;             // ✅ Tránh bị chặn
+       options.ExpireTimeSpan = TimeSpan.FromMinutes(2880); // đang để 1phut test, muốn thì sửa lại
+       options.SlidingExpiration = true;
+   }
+  );
 // Thêm chính sách "AdminPolicy"
 builder.Services.AddAuthorization(options =>
 {
@@ -182,10 +178,23 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.Use(async (ctx, next) =>
+{
+    var cookie = ctx.Request.Cookies["AdminCookie"];
+    Console.WriteLine($"AdminCookie: {cookie}");
+    Console.WriteLine("IsAuthenticated: " + ctx.User.Identity?.IsAuthenticated);
+    await next();
+});
+
+
 app.UseAuthentication();
 
 app.UseAuthorization();
 
+// Map area trước
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=HomeAdmin}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

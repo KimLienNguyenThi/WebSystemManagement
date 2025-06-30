@@ -22,6 +22,7 @@ namespace WebApi.Controllers.Admin
             _requestService = requestService;
             _context = context;
         }
+        [Authorize(Roles = "Admin,Director")]
 
         [HttpPost]
         public async Task<ActionResult<Requirement_Company>> GetAllRequest([FromBody] GetListReqad aa)
@@ -29,6 +30,8 @@ namespace WebApi.Controllers.Admin
             var sup = await _requestService.GetAllRequest(aa);
             return Ok(sup);
         }
+        [Authorize(Roles = "Admin,Director")]
+
         [HttpGet]
         public async Task<ActionResult<CompanyAccountDTO>> GetAllInfor([FromQuery] string req)
         {
@@ -61,12 +64,15 @@ namespace WebApi.Controllers.Admin
                 return BadRequest(new { success = false, message = result });
             }
         }
+        [Authorize(Roles = "Admin,Director")]
+
         [HttpGet]
         public async Task<ActionResult<Requirement_Company>> GetRequestByID([FromQuery] string req)
         {
             var company = await _requestService.GetRequestByID(req);
             return Ok(company);
         }
+        [Authorize(Roles = "Admin,Director")]
 
         [HttpPut]
         public IActionResult UpdateStatus([FromBody] historyRequest historyReq)
@@ -108,6 +114,7 @@ namespace WebApi.Controllers.Admin
             }
         }
 
+        [Authorize(Roles = "Admin,Director")]
 
         [HttpGet]
         public async Task<ActionResult<HistoryRequests>> getHIS([FromQuery] string req)
@@ -116,6 +123,7 @@ namespace WebApi.Controllers.Admin
             return Ok(company);
         }
 
+        [Authorize(Roles = "Admin,Director")]
 
         [HttpGet]
         public async Task<ActionResult<ReviewDTO>> GetViewReview([FromQuery] string query)

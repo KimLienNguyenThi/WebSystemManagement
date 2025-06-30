@@ -22,7 +22,7 @@ namespace WebApi.Controllers.Admin
             _regulationsService = regulationsService;
         }
 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public async Task<ActionResult<RegulationsDTO>> GetAllRegulations([FromBody] GetListReq req)
         {
@@ -30,16 +30,16 @@ namespace WebApi.Controllers.Admin
             return Ok(regu);
         }
 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public async Task<ActionResult<EndowDTO>> GetAllEndow([FromBody] GetListReq req)
         {
             var regu = await _regulationsService.GetAllEndow(req);
             return Ok(regu);
         }
-        
+
         //thêm 1 nhóm dịch vụ mới ---có nhóm mới tên 1 cái 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public IActionResult InsertRegulation([FromBody] RegulationsDTO regu, [FromQuery] string id)
         {
@@ -66,9 +66,9 @@ namespace WebApi.Controllers.Admin
             }
 
         }
-        
+
         //sửa tên nhóm dịch vụ
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public IActionResult Update([FromBody] RegulationsDTO regu, [FromQuery] string id)
         {
@@ -90,9 +90,9 @@ namespace WebApi.Controllers.Admin
             }
             return BadRequest(new { success = false, message = company });
         }
-        
+
         //thêm 1 tên mới
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public IActionResult InsertTypename([FromBody] RegulationsDTO regu, [FromQuery] string id)
         {
@@ -119,9 +119,9 @@ namespace WebApi.Controllers.Admin
             }
 
         }
-        
+
         //sửa tên 1 dịch vụ 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public IActionResult UpdateTypename([FromBody] RegulationsDTO regu, [FromQuery] string id)
         {
@@ -145,7 +145,7 @@ namespace WebApi.Controllers.Admin
         }
 
         //xóa tên 1 dịch vụ
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public IActionResult DeleteTypename([FromBody] RegulationsDTO regu, [FromQuery] string id)
         {
@@ -169,7 +169,7 @@ namespace WebApi.Controllers.Admin
         }
 
         //Thêm ưu đãi 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public IActionResult InsertEndow([FromBody] EndowDTO endow, [FromQuery] string id)
         {
@@ -197,7 +197,7 @@ namespace WebApi.Controllers.Admin
         }
 
         //Sửa ưu đãi
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public IActionResult UpdateEndow([FromBody] EndowDTO endow, [FromQuery] string id)
         {
@@ -221,7 +221,7 @@ namespace WebApi.Controllers.Admin
         }
 
         //Lấy list dịch vụ để dropdown 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpGet]
         public async Task<ActionResult<ServiceGroup>> GetListServiceID()
         {

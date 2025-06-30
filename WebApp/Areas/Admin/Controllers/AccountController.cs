@@ -39,7 +39,7 @@ namespace WebApp.Areas.Admin.Controllers
             //_client.BaseAddress = baseAddress;
         }
 
-        [AuthorizeToken]
+        [AllowAnonymous]
         [Route("")]
         public IActionResult Index()
         {
@@ -49,11 +49,18 @@ namespace WebApp.Areas.Admin.Controllers
             //}
             //else
             //{
-                return View();
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                if (HttpContext.Request.Path.Value.Contains("/admin/LoginAdmin/Login", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Redirect("/admin/homeadmin/index");
+                }
+            }
+            return View();
             //}
         }
 
-        [AuthorizeToken]
+        [AllowAnonymous]
         [Route("ContractApproval")]
         public IActionResult ContractApproval()
         {
@@ -63,7 +70,21 @@ namespace WebApp.Areas.Admin.Controllers
             //}
             //else
             //{
-             return View();
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                if (HttpContext.Request.Path.Value.Contains("/admin/LoginAdmin/Login", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Redirect("/admin/homeadmin/index");
+                }
+            }
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                if (HttpContext.Request.Path.Value.Contains("/admin/LoginAdmin/Login", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Redirect("/admin/homeadmin/index");
+                }
+            }
+            return View();
             //}
         }
 
@@ -319,47 +340,7 @@ namespace WebApp.Areas.Admin.Controllers
             }
         }
 
-        //hàm boss ký. 
-        //[HttpPost]
-        //[Route("SignPdfWithAdminCertificate")]
-        //public async Task<IActionResult> SignPdfWithAdminCertificate([FromBody] SignAdminRequest request)
-        //{
-        //    try
-        //    {
-        //        // Lấy token từ Header
-        //        string token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-        //        if (string.IsNullOrEmpty(token))
-        //            return Unauthorized(new { success = false, message = "Thiếu token." });
-
-        //        // Thiết lập Authorization Header
-        //        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-        //        // Gửi request đến API ký hợp đồng
-        //        var httpContent = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
-        //        HttpResponseMessage response = await _client.PostAsync(_client.BaseAddress + "/account/SignPdfWithAdminCertificate", httpContent);
-
-        //        // Đọc nội dung phản hồi từ API
-        //        string responseBody = await response.Content.ReadAsStringAsync();
-        //        var apiResponse = JsonConvert.DeserializeObject<JObject>(responseBody);
-
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            string signedFilePath = apiResponse["signedFilePath"]?.ToString();
-        //            return Ok(new { success = true, signedFilePath });
-        //        }
-        //        else
-        //        {
-        //            string errorMessage = apiResponse["message"]?.ToString() ?? "Ký thất bại.";
-        //            return BadRequest(new { success = false, message = errorMessage });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Lỗi hệ thống: {ex.Message}");
-        //        return StatusCode(500, new { success = false, message = "Lỗi hệ thống, vui lòng thử lại sau." });
-        //    }
-        //}
-
+        
         //gửi client
         [HttpPost]
         [Route("SendEmailtoclient")]
@@ -607,5 +588,45 @@ namespace WebApp.Areas.Admin.Controllers
             }
         }
 
+
+        //Huỷ
+        [HttpPost]
+        [Route("CancelContract")]
+        public async Task<IActionResult> CancelContract([FromBody] CancelContractRequest request)
+        {
+            if (!Request.Headers.ContainsKey("Authorization"))
+                return Unauthorized(new { success = false, message = "Thiếu token." });
+
+            string token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "").Trim();
+            if (string.IsNullOrEmpty(token))
+                return Unauthorized(new { success = false, message = "Token không hợp lệ." });
+
+            if (string.IsNullOrEmpty(request.StaffId))
+                return BadRequest(new { success = false, message = "Mã nhân viên không hợp lệ!" });
+
+            if (request == null)
+                return BadRequest(new { success = false, message = "Dữ liệu không hợp lệ." });
+
+            try
+            {
+                var jsonContent = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await _client.PostAsync(_apiConfigs.BaseApiUrl + "/admin/ContractsManagement/CancelContract", jsonContent);
+
+                var result = await response.Content.ReadAsStringAsync();
+                var apiResponse = JsonConvert.DeserializeObject<JObject>(result);
+
+                if (response.IsSuccessStatusCode)
+                    return Ok(new { success = true });
+                else
+                    return BadRequest(new { success = false });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi hệ thống: {ex.Message}");
+                return StatusCode(500, new { success = false, message = "Lỗi hệ thống, vui lòng thử lại sau." });
+            }
+        }
     }
 }

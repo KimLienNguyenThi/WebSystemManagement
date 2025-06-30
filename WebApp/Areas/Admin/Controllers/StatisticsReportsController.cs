@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using WebApi.DTO;
 using WebApp.Configs;
@@ -25,10 +26,19 @@ namespace WebApp.Areas.Admin.Controllers
             _client.Timeout = TimeSpan.FromMinutes(5); // Thêm dòng này
         }
 
-        [AuthorizeToken]
+        // [AuthorizeToken]
+        [AllowAnonymous]
+
         [Route("")]
         public IActionResult Index()
         {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                if (HttpContext.Request.Path.Value.Contains("/admin/LoginAdmin/Login", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Redirect("/admin/homeadmin/index");
+                }
+            }
             return View();
         }
 
@@ -162,5 +172,50 @@ namespace WebApp.Areas.Admin.Controllers
                 return StatusCode(500, new { success = false, message = "Lỗi kết nối đến server." });
             }
         }
+        [HttpGet]
+        [Route("GetLoyalCustomers")]
+        public async Task<IActionResult> GetLoyalCustomers()
+        {
+            try
+            {
+                // Lấy token từ header
+                string token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+                if (string.IsNullOrEmpty(token))
+                    return Unauthorized(new { success = false, message = "Thiếu token." });
+
+                // Đặt token vào header của HttpClient
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                // Gọi đến API backend lấy danh sách khách hàng thân thiết
+                HttpResponseMessage response = await _client.GetAsync(_apiConfigs.BaseApiUrl + "/admin/StatisticsReports/GetLoyalCustomers");
+               
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseData = await response.Content.ReadAsStringAsync();
+                    var responseObject = JsonConvert.DeserializeObject<List<LoyalCustomerDTO>>(responseData);
+
+                    return Ok(new
+                    {
+                        success = true,
+                        data = responseObject
+                    });
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = errorMessage
+                    });
+                }
+            }
+            catch
+            {
+                return StatusCode(500, new { success = false, message = "Lỗi kết nối đến server." });
+            }
+        }
+
     }
 }

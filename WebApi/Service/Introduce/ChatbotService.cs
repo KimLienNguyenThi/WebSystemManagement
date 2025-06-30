@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Text;
+using WebApi.Configs;
 using WebApi.DTO;
 using WebApi.Models;
 
@@ -8,13 +10,16 @@ public class ChatbotService
 {
     private readonly ManagementDbContext _context;
     private readonly HttpClient _client;
+    private readonly ApiConfigs _config;
 
-    public ChatbotService(ManagementDbContext context)
+    public ChatbotService(ManagementDbContext context, IOptions<ApiConfigs> options)
     {
         _context = context;
+        _config = options.Value;
+
         _client = new HttpClient
         {
-            BaseAddress = new Uri("http://localhost:11434"),
+            BaseAddress = new Uri(_config.ApiOllama),
             Timeout = TimeSpan.FromMinutes(5) 
         };
     }

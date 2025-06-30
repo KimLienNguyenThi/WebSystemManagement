@@ -84,7 +84,7 @@ namespace WebApi.Controllers.Admin
             }
         }
 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public async Task<IActionResult> ThemNhanVien([FromBody] StaffDTO obj)
         {
@@ -116,7 +116,7 @@ namespace WebApi.Controllers.Admin
             }
         }
 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public IActionResult UpdateThongTinNhanVien([FromBody] StaffDTO obj)
         {

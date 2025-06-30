@@ -25,6 +25,8 @@ public partial class Contract
 
     public int? Constatus { get; set; }
 
+    public string? Messageun { get; set; }
+
     public virtual ICollection<ContractFile> ContractFiles { get; set; } = new List<ContractFile>();
 
     public virtual ICollection<ContractStatusHistory> ContractStatusHistories { get; set; } = new List<ContractStatusHistory>();

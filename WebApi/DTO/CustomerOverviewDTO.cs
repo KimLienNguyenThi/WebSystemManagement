@@ -61,4 +61,13 @@
         public int Star4 { get; set; }
         public int Star5 { get; set; }
     }
+
+    public class LoyalCustomerDTO
+    {
+        public int CompanyId { get; set; }
+        public string CustomerId { get; set; }
+        public string CompanyName { get; set; }
+        public int ContractCount { get; set; }
+    }
+
 }

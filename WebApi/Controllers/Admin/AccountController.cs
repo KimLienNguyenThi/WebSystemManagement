@@ -38,7 +38,7 @@ namespace WebApi.Controllers.Admin
           
         }
 
-        [Authorize(Roles = "Admin,HanhChinh,Director")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public async Task<ActionResult<CompanyAccountDTO>> GetAllCompany([FromBody] GetListCompanyPaging req)
         {
@@ -46,7 +46,7 @@ namespace WebApi.Controllers.Admin
             return Ok(company);
         }
 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPut]
         public IActionResult UpdateStatus([FromBody] updateID updateID)
         {
@@ -78,9 +78,9 @@ namespace WebApi.Controllers.Admin
                 Console.WriteLine("Lỗi cập nhật: " + ex.Message);
                 return BadRequest(ex.Message);
             }
-        }       
+        }
 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public IActionResult Update([FromBody] CompanyAccountDTO companyAccountDTO, [FromQuery] string id)
         {
@@ -103,6 +103,8 @@ namespace WebApi.Controllers.Admin
             return BadRequest(new { success = false, message = company });
         }
 
+        [Authorize(Roles = "Admin,Director")]
+
         [HttpPost]
         public async Task<IActionResult> ExportToCsv([FromBody] ExportRequestDTO request)
         {
@@ -117,7 +119,7 @@ namespace WebApi.Controllers.Admin
             }
         }
 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpGet]
         public async Task<ActionResult<ServiceTypeDTO2>> GetListServiceID()
         {
@@ -126,7 +128,7 @@ namespace WebApi.Controllers.Admin
         }
 
         //TẠO FILE CHỜ SẾP KÝ
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public async Task<IActionResult> GenerateContract([FromBody] CompanyAccountDTO dto, [FromQuery] string id)
         {
@@ -283,7 +285,7 @@ namespace WebApi.Controllers.Admin
         //}
 
         //Gửi client
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public async Task<IActionResult> SendEmailtoclient([FromBody] SignAdminRequest dto)
         {
@@ -301,7 +303,7 @@ namespace WebApi.Controllers.Admin
         }
 
         //Duyệt 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public async Task<IActionResult> BrowseSignofClient([FromBody] SignAdminRequest dto)
         {
@@ -319,7 +321,7 @@ namespace WebApi.Controllers.Admin
         }
 
         //admin Xác nhận hoàn tất
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public async Task<IActionResult> Insert([FromBody] SignAdminRequest request)
         {

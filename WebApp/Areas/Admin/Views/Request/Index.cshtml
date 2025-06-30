@@ -651,6 +651,7 @@
     $(document).ready(function () {
         init();
     });
+    var StaffId = "@User.FindFirst("StaffId")?.Value";
 
     function init() {
         if ($.fn.DataTable.isDataTable("#listRe")) {
@@ -685,7 +686,7 @@
                     return JSON.stringify({
                         PageSize: data.length,
                         Page: currentPageIndex,
-                        Customer: ""
+                        Customer: StaffId,
                     });
                 },
                 dataSrc: function (res) {

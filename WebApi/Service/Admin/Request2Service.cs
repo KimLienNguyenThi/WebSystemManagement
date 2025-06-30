@@ -33,7 +33,7 @@ namespace WebApi.Service.Admin
                         on c.Customerid equals a.Customerid
                         join s in _context.SupportTypes 
                         on r.SupportCode equals s.SupportCode
-                       
+
                         join q in _context.ServiceTypes on h.ServiceTypeid equals q.Id
                         join st in _context.Assigns on r.Requirementsid equals st.Requirementsid // ✅ join bảng Staffs
                         where st.Department == depart
@@ -207,7 +207,7 @@ namespace WebApi.Service.Admin
 
 
                     bool isVip = contractNumber.Customertype == true;
-                    int limit = isVip ? 7 : 5;
+                    int limit = isVip ? 10 : 6;
 
                     if (currentMonthCount >= limit)
                     {

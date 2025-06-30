@@ -217,5 +217,42 @@ namespace WebApi.Service.Admin
 
             return dto;
         }
+
+        public async Task<List<LoyalCustomerDTO>> GetLoyalCustomers()
+        {
+            var topCustomers = await (from contract in _context.Contracts
+                                      join company in _context.Companies
+                                          on contract.Customerid equals company.Customerid
+                                      where contract.IsActive == true && company.IsActive == true
+                                      group contract by new { company.Id, company.Customerid, company.Companyname } into g
+                                      orderby g.Count() descending
+                                      select new LoyalCustomerDTO
+                                      {
+                                          CompanyId = g.Key.Id,
+                                          CustomerId = g.Key.Customerid,
+                                          CompanyName = g.Key.Companyname,
+                                          ContractCount = g.Count()
+                                      })
+                              .Take(10)
+                              .ToListAsync();
+
+            int missingCount = 10 - topCustomers.Count;
+            if (missingCount > 0)
+            {
+                var placeholders = Enumerable.Range(1, missingCount).Select(i => new LoyalCustomerDTO
+                {
+                    CompanyId = 0,
+                    CustomerId = $"N/A_{i}",
+                    CompanyName = $"(Trống {i})",
+                    ContractCount = 0
+                }).ToList();
+
+                topCustomers.AddRange(placeholders);
+            }
+
+            return topCustomers;
+        }
+
+
     }
 }

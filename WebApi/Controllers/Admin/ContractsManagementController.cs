@@ -28,16 +28,16 @@ namespace WebApi.Controllers.Admin
         }
 
         //Lấy thông tin công ty chính thức
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public async Task<ActionResult<CompanyAccountDTO>> GetAllCompany([FromBody] GetListCompanyPaging req)
         {
             var company = await _contractService.GetAllCompany(req);
             return Ok(company);
         }
-       
+
         //Gia hạn hợp đồng
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public IActionResult InsertExtend([FromBody] ContractDTO contractDTO, [FromQuery] string id)
         {
@@ -66,7 +66,7 @@ namespace WebApi.Controllers.Admin
         }
 
         //Tạo file hợp đồng mới
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public async Task<IActionResult> GenerateContract([FromBody] CompanyAccountDTO dto, [FromQuery] string id)
         {
@@ -123,7 +123,7 @@ namespace WebApi.Controllers.Admin
         }
 
         //nâng cấp hợp đồng 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public IActionResult InsertUpgrade([FromBody] ContractDTO contractDTO, [FromQuery] string id)
         {
@@ -152,7 +152,7 @@ namespace WebApi.Controllers.Admin
         }
 
         //Lấy ưu đãi đang có hiệu lực theo nhóm dịch vụ của hợp đồng
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpGet]
         public async Task<ActionResult<Endow>> GetListEndow([FromQuery] string id)
         {
@@ -168,7 +168,7 @@ namespace WebApi.Controllers.Admin
         }
 
         //Tạo file hợp đồng gia hạn
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public async Task<IActionResult> GenerateContractExtend([FromBody] ContractDTO contractDTO, [FromQuery] string id)
         {
@@ -247,7 +247,7 @@ namespace WebApi.Controllers.Admin
         }
 
         //Tạo file hợp đồng nâng cấp
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public async Task<IActionResult> GenerateContractUpgrade([FromBody] ContractDTO contractDTO, [FromQuery] string id)
         {
@@ -317,6 +317,33 @@ namespace WebApi.Controllers.Admin
             }
             return Ok(new { success = true, fullPath });
 
+        }
+
+        //admin Xác nhận cancel
+        [Authorize(Roles = "Admin,Director")]
+        [HttpPost]
+        public async Task<IActionResult> CancelContract([FromBody] CancelContractRequest request)
+        {
+            if (request == null)
+            {
+                Console.WriteLine("Dữ liệu đầu vào không hợp lệ.");
+                return BadRequest(new { success = false, message = "Dữ liệu không hợp lệ." });
+            }
+
+            var (result, mes) = await _contractService.CancelContract(request);
+
+            if (result)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    message = mes,
+                });
+            }
+            else
+            {
+                return BadRequest(new { success = false, message = mes });
+            }
         }
 
     }

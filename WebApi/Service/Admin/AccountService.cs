@@ -567,7 +567,7 @@ namespace WebApi.Service.Admin
                         join h in fileJoin on b.Contractnumber equals h.Contractnumber
                         where 
                                 //(b.Constatus=="Chưa ký"||b.Constatus == "Đã ký" ||b.Constatus=="Chờ client ký"|| b.Constatus == "Ký hoàn tất" || b.Constatus == "Đã thanh toán")
-                                b.Constatus==0||b.Constatus == 1 ||b.Constatus==2|| b.Constatus == 3 || b.Constatus == 4 || b.Constatus == 5
+                                b.Constatus==0||b.Constatus == 1 ||b.Constatus==2|| b.Constatus == 3 || b.Constatus == 4 || b.Constatus == 5 || b.Constatus == 7
                         select new CompanyContractDTOs
                         {
                             ContractNumber = b.Contractnumber,
@@ -585,7 +585,8 @@ namespace WebApi.Service.Admin
                             Gender = a.Gender,
                             FilePath = h.FilePath,
                             ConfileName = h.ConfileName,
-                            Constatus = b.Constatus
+                            Constatus = b.Constatus,
+                            Message = b.Messageun,
                         };
 
             var totalRow = await query.CountAsync();

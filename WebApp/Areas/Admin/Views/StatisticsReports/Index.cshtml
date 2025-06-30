@@ -230,6 +230,14 @@
         height: 60px;
 
     }
+
+    .loyal-chart-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
 </style>
 
 <body>
@@ -252,9 +260,19 @@
         <!-- Mục hiển thị danh sách -->
         <div class="row flex-grow-1 overflow-auto">
             <div class="col-12">
+                <!-- PANEL: KHÁCH HÀNG -->
                 <div id="clientPanel" class="sub-panel">
-                    @* hiển thị nội dung của khách hàng *@
+                    <div id="clientOverviewStats"></div>
+
+                    <h5 style="padding-left: 200px;">👥 Khách hàng thân thiết</h5>
+
+                    <div class="loyal-chart-wrapper d-flex justify-content-center align-items-center" style="height: 400px;">
+                        <canvas id="loyalCustomerChart" style="height: 100%; width: auto;"></canvas>
+                    </div>
+
+
                 </div>
+
                 <!-- PANEL: DOANH THU -->
                 <div id="revenuePanel" class="sub-panel" style="display:none;">
                     <div class="d-flex align-items-center mb-3" style="gap: 10px;">
@@ -368,6 +386,7 @@
         switch (panelId) {
             case 'clientPanel':
                 loadClientOverview();
+                loadLoyalCustomers();
                 break;
             case 'revenuePanel':
                 loadRevenueData();
@@ -388,60 +407,102 @@
             url: '/admin/StatisticsReports/GetCustomerOverview',
             method: 'GET',
             headers: {
-                "Authorization": "Bearer " + tokenJWT  // Thêm token JWT nếu cần thiết
+                "Authorization": "Bearer " + tokenJWT
             },
             success: function (data) {
                 const dto = data.data;
-                const panel = $('#clientPanel');
-                panel.html(`
+                const statsHtml = `
                     <div class="stat-boxes">
                         <div class="stat-box purple">
-                            <div class="info">
-                                <h2>${dto.totalContactRequests}</h2>
-                                <div>Yêu cầu tạo hợp đồng</div>
-                            </div>
+                            <div class="info"><h2>${dto.totalContactRequests}</h2><div>Yêu cầu tạo hợp đồng</div></div>
                             <div class="icon">📝</div>
                         </div>
                         <div class="stat-box blue">
-                            <div class="info">
-                                <h2>${dto.totalApprovedCompanies}</h2>
-                                <div>Khách hàng đã duyệt</div>
-                            </div>
+                            <div class="info"><h2>${dto.totalApprovedCompanies}</h2><div>Khách hàng đã duyệt</div></div>
                             <div class="icon">✅</div>
                         </div>
                         <div class="stat-box green">
-                            <div class="info">
-                                <h2>${dto.activeContracts}</h2>
-                                <div>HĐ đang hoạt động</div>
-                            </div>
+                            <div class="info"><h2>${dto.activeContracts}</h2><div>HĐ đang hoạt động</div></div>
                             <div class="icon">📄</div>
                         </div>
                         <div class="stat-box orange">
-                            <div class="info">
-                                <h2>${dto.normalApprovedContracts}</h2>
-                                <div>HĐ loại thường</div>
-                            </div>
+                            <div class="info"><h2>${dto.normalApprovedContracts}</h2><div>HĐ loại thường</div></div>
                             <div class="icon">📁</div>
                         </div>
                         <div class="stat-box red">
-                            <div class="info">
-                                <h2>${dto.vipApprovedContracts}</h2>
-                                <div>HĐ loại VIP</div>
-                            </div>
+                            <div class="info"><h2>${dto.vipApprovedContracts}</h2><div>HĐ loại VIP</div></div>
                             <div class="icon">👑</div>
                         </div>
                         <div class="stat-box cyan">
-                            <div class="info">
-                                <h2>${dto.expiringContracts}</h2>
-                                <div>HĐ sắp hết hạn</div>
-                            </div>
+                            <div class="info"><h2>${dto.expiringContracts}</h2><div>HĐ sắp hết hạn</div></div>
                             <div class="icon">⏰</div>
                         </div>
                     </div>
-                `);
+                `;
+                $("#clientOverviewStats").html(statsHtml);
             }
         });
     }
+
+    let loyalCustomerChart;
+
+    function loadLoyalCustomers() {
+        $.ajax({
+            url: '/admin/StatisticsReports/GetLoyalCustomers',
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer " + tokenJWT
+            },
+            success: function (response) {
+                if (response.success) {
+                    const data = response.data;
+
+                    const labels = data.map(c => c.companyName);
+                    const counts = data.map(c => c.contractCount);
+
+                    // Nếu chart đã tồn tại thì hủy bỏ
+                    if (loyalCustomerChart) {
+                        loyalCustomerChart.destroy();
+                    }
+
+                    const ctx = document.getElementById('loyalCustomerChart').getContext('2d');
+                    loyalCustomerChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Số lượng hợp đồng',
+                                data: counts,
+                                backgroundColor: '#4CAF50'
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'x',
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false },
+                                title: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    alert("Không thể tải dữ liệu khách hàng thân thiết.");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX error:", error);
+                alert("Lỗi khi tải dữ liệu khách hàng thân thiết.");
+            }
+        });
+    }
+
 
     // ==================== REVENUE ====================
     function loadRevenueData() {

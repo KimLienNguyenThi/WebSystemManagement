@@ -32,6 +32,8 @@
         public DateTime? Enddate { get; set; }
         public decimal Amount { get; set; }
         public string? Original { get; set; }
+        public string? Message { get; set; }
+
 
     }
     public class PagingResult<T>
@@ -88,6 +90,8 @@
         public decimal Amount { get; set; }
         public string? Original { get; set; }
         public int? Constatus { get; set; }
+        public string? Message { get; set; }
+
 
     }
     public class SignAdminRequest
@@ -105,5 +109,13 @@
         public DateTime? Start { get; set; }
         public DateTime End { get; set; }
 
+    }
+
+    public class CancelContractRequest
+    {
+        public string StaffId { get; set; }
+        public string FilePath { get; set; }
+        public string ContractNumber { get; set; }
+        public string Message { get; set; }
     }
 }

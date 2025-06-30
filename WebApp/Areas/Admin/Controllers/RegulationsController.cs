@@ -25,7 +25,9 @@ namespace WebApp.Areas.Admin.Controllers
 
             _client = new HttpClient();
         }
-        [AuthorizeToken]
+        // [AuthorizeToken]
+        [AllowAnonymous]
+
         [Route("")]
         public IActionResult Index()
         {
@@ -35,7 +37,14 @@ namespace WebApp.Areas.Admin.Controllers
             //}
             //else
             //{
-                return View();
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                if (HttpContext.Request.Path.Value.Contains("/admin/LoginAdmin/Login", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Redirect("/admin/homeadmin/index");
+                }
+            }
+            return View();
             //}
         }
 

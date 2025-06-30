@@ -116,6 +116,7 @@ namespace WebApp.Controllers
             var vnp_Url = _configuration["VNPAY:vnp_Url"];
             var vnp_TmnCode = _configuration["VNPAY:vnp_TmnCode"];
             var vnp_HashSecret = _configuration["VNPAY:vnp_HashSecret"];
+            var timeZone = int.Parse(_configuration["VNPAY:timeZone"]);
 
             if (string.IsNullOrEmpty(vnp_TmnCode) || string.IsNullOrEmpty(vnp_HashSecret))
             {
@@ -129,6 +130,7 @@ namespace WebApp.Controllers
             vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
             vnpay.AddRequestData("vnp_Amount", ((int)(amount * 100)).ToString());
             vnpay.AddRequestData("vnp_BankCode", "VNBANK");
+            vnpay.AddRequestData("vnp_CreateDate", DateTime.UtcNow.AddHours(timeZone).ToString("yyyyMMddHHmmss"));
             vnpay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
             vnpay.AddRequestData("vnp_CurrCode", "VND");
             vnpay.AddRequestData("vnp_IpAddr", HttpContext.Connection.RemoteIpAddress?.ToString());

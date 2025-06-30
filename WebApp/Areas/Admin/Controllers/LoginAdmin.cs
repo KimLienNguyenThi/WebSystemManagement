@@ -41,20 +41,36 @@ namespace WebApp.Areas.Admin.Controllers
             if (!User.Identity.IsAuthenticated)
                 return RedirectToAction("Login");
             else
-                return RedirectToAction("Index", "homeadmin");
+                return Redirect("/admin/homeadmin/index");
         }
 
-        [AuthorizeToken]
+        [AllowAnonymous]
         [Route("Login")]
         public IActionResult Login()
         {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                if (HttpContext.Request.Path.Value.Contains("/admin/LoginAdmin/Login", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Redirect("/admin/homeadmin/index");
+                }
+            }
+
             return View();
         }
 
-        [AuthorizeToken]
+
+        [Authorize(AuthenticationSchemes = "AdminCookie")]
         [Route("ResetPass")]
         public IActionResult ResetPass()
         {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                if (HttpContext.Request.Path.Value.Contains("/admin/LoginAdmin/Login", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Redirect("/admin/homeadmin/index");
+                }
+            }
             return View();
         }
 
@@ -101,13 +117,13 @@ namespace WebApp.Areas.Admin.Controllers
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync("AdminCookie", claimsPrincipal);
 
-                Response.Cookies.Append("AuthToken", apiResponse.Message, new CookieOptions
-                {
-                    HttpOnly = true,  // Cookie chỉ được gửi qua HTTP, không thể truy cập bằng JavaScript
-                    Secure = true,    // Chỉ gửi cookie qua HTTPS
-                    SameSite = SameSiteMode.Strict,
-                    Expires = DateTime.UtcNow.AddMinutes(5)
-                });
+                //Response.Cookies.Append("AuthToken", apiResponse.Message, new CookieOptions
+                //{
+                //    HttpOnly = true,  // Cookie chỉ được gửi qua HTTP, không thể truy cập bằng JavaScript
+                //    Secure = true,    // Chỉ gửi cookie qua HTTPS
+                //    SameSite = SameSiteMode.Strict,
+                //    Expires = DateTime.UtcNow.AddMinutes(5)
+                //});
 
 
                 // Trả về accessToken thay vì message
@@ -119,8 +135,7 @@ namespace WebApp.Areas.Admin.Controllers
             }
         }
 
-
-
+        [Authorize(AuthenticationSchemes = "AdminCookie")]
         [Route("Logout")]
         //[Authorize(AuthenticationSchemes = "AdminCookie")]
         public async Task<IActionResult> Logout()
@@ -128,8 +143,10 @@ namespace WebApp.Areas.Admin.Controllers
             // Xóa phiên đăng nhập
             await HttpContext.SignOutAsync("AdminCookie");
 
-            return RedirectToAction("Login");
+            Response.Cookies.Delete("AdminCookie");
+            return RedirectToAction("Login", "LoginAdmin", new { area = "Admin" });
         }
+    
         [HttpPost]
         [Route("SendEmailOTP")]
         public async Task<IActionResult> SendEmailOTP([FromBody] SendOtpRequest request)

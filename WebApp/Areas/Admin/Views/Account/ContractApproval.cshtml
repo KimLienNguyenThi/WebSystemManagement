@@ -126,6 +126,8 @@
                                     <th>Tên công ty</th>
                                     <th>File đã ký</th>
                                     <th>Hành động</th>
+                                    <th>Lý do</th>
+                                    <th>Huỷ</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -199,6 +201,28 @@
         </div>
     </div>
 </div>
+
+<!-- Modal confirm -->
+<div class="modal fade" id="ModalConfirmCancel" tabindex="-1" aria-labelledby="ModalSuccess" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="ModalErrorLabel">Xác nhận huỷ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="contentModalConfirmCancel"></p>
+                <p>Lý do</p>
+                <textarea rows="2" class="form-control" multiple id="noteCancel" placeholder="Lý do huỷ"> </textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseModalConfirmCancel">Đóng</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmCancel">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     let signedStateMap = {};
@@ -206,6 +230,9 @@
     var StaffId = "@User.FindFirst("StaffId")?.Value";
 
     const tokenJWT = localStorage.getItem("accessToken");
+
+    let contractNumberCancel = '';
+    let realFilePathCancel = '';
 
     document.addEventListener("DOMContentLoaded", function () {
         if ($.fn.DataTable.isDataTable("#pendingContracts")) {
@@ -325,9 +352,10 @@
                             </a>`;
                     }
                 },
+
                 {
                     data: "constatus",
-                    width: "25%",
+                    width: "15%",
                     render: function (data, type, row) {
                         const contractNumber = row.contractNumber;
                         const normalizedStatus = row.constatus;
@@ -391,7 +419,45 @@
                                         </button>
                                     </div>`;
                         }
+                        if (normalizedStatus == 7) {
+                            return `<span class="text-muted">Đã huỷ</span>`;
+                        }
                         return `<span class="text-muted">Chưa ký</span>`;
+                    }
+                },
+                {
+                    data: "message",
+                    width: "15%",
+                    render: function (data, type, row) {
+                        if (!data || data.trim() === "") {
+                            return `<span class="text-muted">-</span>`;
+                        }
+                        return data;
+                    }
+                },
+                    {
+                    data: "constatus",
+                    width: "15%",
+                    render: function (data, type, row) {
+                        const contractNumber = row.contractNumber;
+                        const normalizedStatus = row.constatus;
+
+                        const statusAllowCancel = [0, 1, 2, 3];
+
+                        if (statusAllowCancel.includes(normalizedStatus)) {
+                            return `
+                                        <div class="d-flex justify-content-center gap-2">
+                                                    <button class="btn btn-sm btn-danger btn-cancel-contract"
+                                                    title="Huỷ hợp đồng"
+                                                    data-contractnumber="${contractNumber}"
+                                                        data-confilename="${row.confileName}"
+                                                        data-filepath="${row.filePath}">
+                                                <i class="fa-solid fa-paper-plane"></i> Huỷ
+                                            </button>
+                                        </div>`;
+                        }
+
+                        return ``;
                     }
                 }
             ],
@@ -735,7 +801,7 @@
                         $("#ModalSuccess").modal("show");
                         backBtn3.click();
                         // Reload lại bảng để cập nhật UI
-                        init("", "Tất cả");
+                        //init("", "Tất cả");
                     } else {
                         showError("Xác nhận hoàn tất hợp đồng thất bại: " + (res.message || ""));
                     }
@@ -748,6 +814,13 @@
         });
     });
    
+    $('#pendingContracts').on('click', '.btn-cancel-contract', function () {
+        contractNumberCancel = $(this).data('contractnumber');
+        realFilePathCancel = $(this).data('filepath');
+
+        const confirmed = showConfirmCancel("Bạn có chắc chắn muốn hủy hợp đồng?");
+    });
+
     function showError(message) {
         document.getElementById("contentModalError").innerText = message;
 
@@ -762,4 +835,72 @@
         });
     }
 
+
+    function showConfirmCancel(message) {
+        document.getElementById("contentModalConfirmCancel").innerText = message;
+
+        var errorModal = new bootstrap.Modal(document.getElementById("ModalConfirmCancel"), {
+            keyboard: true, // Cho phép bấm phím ESC để đóng
+            backdrop: 'static' // Không đóng modal khi bấm ngoài
+        });
+        errorModal.show();
+        document.getElementById("btnCloseModalConfirmCancel").addEventListener("click", function () {
+            errorModal.hide();
+        });
+    }
+
+    $('#btnConfirmCancel').on('click', function () {
+        document.getElementById("btnCloseModalConfirmCancel").click();
+        const contractNumber = contractNumberCancel;
+        const filePath = realFilePathCancel;
+        const noteCancel = document.getElementById("noteCancel").value;
+
+        $.ajax({
+            url: '/admin/account/CancelContract',
+            type: 'POST',
+            headers: {
+                "Authorization": "Bearer " + tokenJWT
+            },
+            contentType: 'application/json',
+            data: JSON.stringify({
+                StaffId: StaffId,
+                FilePath: filePath,
+                ContractNumber: contractNumber,
+                message: noteCancel
+            }),
+            success: function (res) {
+                if (res.success) {
+                    document.getElementById("contentModalSuccess").innerHTML = "Huỷ hợp đồng thành công!";
+                    $("#ModalSuccess").modal("show");
+
+                    $('#pdfViewer').addClass('hidden');
+                    $('#pendingContracts').DataTable().ajax.reload(null, false);
+
+                } else {
+                    showError("Huỷ đồng thất bại: " + (res.message || ""));
+                }
+            },
+            error: function () {
+                console.error("Lỗi khi duyệt:", error);
+                showError("Lỗi khi huỷ hợp đồng. Vui lòng thử lại.");
+            }
+        });
+        $('#ModalConfirmCancel').modal('hide'); // đóng modal
+
+    });
+    function showError(message) {
+        document.getElementById("contentModalError").innerText = message;
+
+        // Khởi tạo modal bằng Bootstrap 5
+        var errorModal = new bootstrap.Modal(document.getElementById("ModalError"), {
+            keyboard: true, // Cho phép bấm phím ESC để đóng
+            backdrop: 'static' // Không đóng modal khi bấm ngoài
+        });
+        // Hiển thị modal
+        errorModal.show();
+        // Gán sự kiện đóng modal vào nút "Đóng"
+        document.getElementById("btnCloseModal").addEventListener("click", function () {
+            errorModal.hide();
+        });
+    }
 </script>

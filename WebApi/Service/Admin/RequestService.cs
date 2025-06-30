@@ -201,10 +201,11 @@ namespace WebApi.Service.Admin
 
 
                     bool isVip = contractNumber.Customertype == true;
-                    int limit = isVip ? 7 : 5;
+                    int limit = isVip ? 10 : 6;
 
                     if (currentMonthCount >= limit)
                     {
+                        return $"Khách hàng đã đạt giới hạn {limit} yêu cầu dịch vụ trong tháng {requestMonth}/{requestYear}.";
                         return $"Khách hàng đã đạt giới hạn {limit} yêu cầu dịch vụ trong tháng {requestMonth}/{requestYear}.";
                     }
 

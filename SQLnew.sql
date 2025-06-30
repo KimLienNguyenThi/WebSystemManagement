@@ -85,9 +85,9 @@ CREATE TABLE CONTRACTS (
     FOREIGN KEY (SERVICE_TYPEID) REFERENCES SERVICE_TYPE(ID) ON DELETE SET NULL,
     FOREIGN KEY (CUSTOMERID) REFERENCES COMPANY(CUSTOMERID),
 	IS_ACTIVE BIT NOT NULL, -- 0 NGỪNG HOẠT ĐỘNG, 1 HOẠT ĐỘNG
-	CONSTATUS INT --0: CHƯA KÝ, 1: Đã ký, 2. Chờ Client ký , 3 :Kyhoantat 4.Đã duyệt ký  5 đã thanh toán 6 Duyệt (chính thức),7: Gia hạn, 8: Bị từ chối  
+	CONSTATUS INT ,--0: CHƯA KÝ, 1: Đã ký, 2. Chờ Client ký , 3 :Kyhoantat 4.Đã duyệt ký  5 đã thanh toán 6 Duyệt (chính thức),7: Gia hạn, 8: Bị từ chối  
+	MESSAGEun [nvarchar](500) NULL,
 );
-
 
 -- Bảng lưu file hợp đồng
 CREATE TABLE CONTRACT_FILES (
