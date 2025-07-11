@@ -1,6 +1,6 @@
 ﻿--CREATE DATABASE MANAGEMENT;
 
-USE MANAGEMENT;
+USE MANAGEMENT ;
 
 -- T?O B?NG COMPANY
 CREATE TABLE COMPANY (
@@ -110,7 +110,6 @@ CREATE TABLE CONTRACT_STATUS_HISTORY (
     CHANGED_BY NVARCHAR(100),
     FOREIGN KEY (CONTRACTNUMBER) REFERENCES CONTRACTS(CONTRACTNUMBER),
 );
-
 
 --T?O B?NG NHÂN VIÊN
 CREATE TABLE STAFF (
@@ -225,7 +224,6 @@ CREATE TABLE PAYMENT_TRANSACTION (
     FOREIGN KEY (PAYMENT_ID) REFERENCES PAYMENT(ID)
 );
 
-
 -- tạo bảng giá dịch vụ 
 CREATE TABLE REGULATIONS
 (
@@ -306,62 +304,7 @@ CREATE TABLE NOTIFICATIONS (
 --FOREIGN KEY (SERVICE_TYPEID) REFERENCES SERVICE_TYPE(ID)
 --ON DELETE SET NULL;
 
-INSERT INTO SUPPORT_TYPE ( SUPPORT_CODE, SUPPORT_NAME) VALUES 
-('SP0001',N'Hỗ trợ Cước phí'),
-('SP0002',N'Cập nhật hợp đồng, dịch vụ'),
-('SP0003',N'Hỗ trợ Kỹ thuật'),
-('SP0004',N'Bảo hành thiết bị');	
 
--- Thêm nhóm dịch vụ
-INSERT INTO SERVICE_GROUP (SERVICE_GROUPID, GROUP_NAME) VALUES
-('SER0001', N'Viễn thông & Truyền thông'),
-('SER0002', N'Điện toán đám mây & Phần mềm'),
-('SER0003', N'Hỗ trợ & An toàn thông tin'),
-('SER0004', N'Hợp đồng & Đối tác');
-
--- Thêm loại dịch vụ
-INSERT INTO SERVICE_TYPE (SERVICE_GROUPID, SERVICE_TYPEName,DESCRIPTION_SR) VALUES 
-('SER0001', N'Đầu số thoại', N'Cung cấp đầu số điện thoại cố định hoặc di động cho doanh nghiệp. Hỗ trợ đăng ký, chuyển đổi, và duy trì hoạt động đầu số phục vụ tổng đài hoặc hệ thống liên lạc nội bộ.'),
-('SER0001', N'Kênh truyền', N'Cung cấp kênh truyền dữ liệu chuyên biệt (leased line, MPLS, VPN...). Đảm bảo kết nối ổn định, bảo mật cao giữa các chi nhánh/doanh nghiệp.'),
-('SER0001', N'Tổng đài', N'Triển khai hệ thống tổng đài nội bộ (IPPBX, VoIP) hỗ trợ gọi nội bộ, gọi ra ngoài, ghi âm cuộc gọi, định tuyến thông minh. Hỗ trợ vận hành, bảo trì và xử lý sự cố.'),
-('SER0001', N'Hội nghị truyền hình', N'Cung cấp nền tảng và thiết bị hội nghị trực tuyến chất lượng cao, hỗ trợ kết nối đa điểm, chia sẻ màn hình và ghi hình cuộc họp.'),
-('SER0001', N'Tin nhắn', N'Dịch vụ gửi tin nhắn SMS/Brandname phục vụ truyền thông, chăm sóc khách hàng, OTP. Có báo cáo thống kê và hỗ trợ API tích hợp.'),
-('SER0001', N'Dịch vụ truyền hình', N'Triển khai hệ thống truyền hình IPTV hoặc truyền hình doanh nghiệp, hỗ trợ truyền phát nội dung tùy chỉnh theo nhu cầu khách hàng.'),
-('SER0002', N'Cloud partner', N'Tư vấn, triển khai và đồng hành cùng khách hàng trong quá trình sử dụng dịch vụ từ các nhà cung cấp Cloud lớn (AWS, Azure, GCP...).'),
-('SER0002', N'Điện toán đám mây', N'Cung cấp dịch vụ hạ tầng ảo hóa (IaaS), lưu trữ, máy chủ ảo trên nền tảng cloud. Đảm bảo tính sẵn sàng cao, bảo mật và linh hoạt trong mở rộng.'),
-('SER0002', N'Dịch vụ điện tử', N'Triển khai và hỗ trợ các nền tảng giao dịch điện tử như ký số, hóa đơn điện tử, cổng thanh toán, chứng thực số,...'),
-('SER0002', N'Dịch vụ phần mềm (SaaS)', N'Cung cấp các phần mềm dạng dịch vụ (CRM, ERP, quản lý nhân sự, ticket support...) qua nền tảng web, không cần cài đặt, hỗ trợ vận hành và bảo trì.'),
-('SER0003', N'An toàn thông tin', N'Cung cấp giải pháp bảo mật mạng, bảo vệ dữ liệu, giám sát tấn công, quản lý rủi ro an ninh. Có đội ngũ SOC hỗ trợ 24/7.'),
-('SER0003', N'Giám sát', N'Giải pháp giám sát hệ thống CNTT: hiệu năng hệ thống, ứng dụng, mạng; cảnh báo sự cố sớm để giảm thiểu gián đoạn.'),
-('SER0003', N'Trung tâm dữ liệu', N'Dịch vụ đặt máy chủ (Colocation), thuê chỗ (hosting), và các giải pháp lưu trữ tại Data Center đạt chuẩn Tier III trở lên.'),
-('SER0003', N'Thiết bị', N'Cung cấp, lắp đặt và cấu hình thiết bị mạng, máy chủ, thiết bị bảo mật (firewall, switch, router...) kèm dịch vụ bảo trì.'),
-('SER0003', N'Hỗ trợ CNTT', N'Dịch vụ Helpdesk/IT outsourcing hỗ trợ người dùng cuối, khắc phục sự cố, bảo trì định kỳ, tư vấn tối ưu hệ thống CNTT doanh nghiệp.'),
-('SER0004', N'Hợp đồng tích hợp/dự án', N'Cung cấp giải pháp tổng thể theo yêu cầu doanh nghiệp: từ tư vấn, thiết kế, triển khai, đến bảo trì hệ thống CNTT/viễn thông.'),
-('SER0004', N'Hợp đồng hợp tác', N'Các hợp đồng hợp tác chiến lược giữa hai bên để cùng khai thác dịch vụ, chia sẻ lợi ích, thúc đẩy chuyển đổi số hoặc phát triển hạ tầng.'),
-('SER0004', N'Đối tác', N'Thiết lập và duy trì mối quan hệ với các đối tác chiến lược nhằm mở rộng thị trường, nâng cao năng lực cung cấp dịch vụ và tạo ra giá trị cộng hưởng. Hỗ trợ tư vấn mô hình hợp tác, chia sẻ hạ tầng, công nghệ và khai thác dịch vụ chung.');
-
-insert into REGULATIONS (SERVICE_GROUPID,PRICE) values ('SER0001','1000000')
-insert into REGULATIONS (SERVICE_GROUPID,PRICE) values ('SER0002','1500000')
-insert into REGULATIONS (SERVICE_GROUPID,PRICE) values ('SER0003','1800000')
-insert into REGULATIONS (SERVICE_GROUPID,PRICE) values ('SER0004','1200000')
-
-insert into staff( STAFFID, STAFFNAME, STAFFADDRESS, STAFFDATE, STAFFEMAIL, STAFFGENDER, STAFFPHONE,DEPARTMENT)
-values('Sta1', N'Nguyễn Thị Kim Liên', N'Quận 9', '2000-08-25', 'lien@gmail.com',1,'0365812848',N'Director'),
-	  ('Sta2', N'Nguyễn Thành A', N'Quận 9', '2000-08-25', 'liennbtbt11@gmail.com',1,'0365812847',N'Admin')
-
-INSERT INTO LOGINADMIN(STAFFID, USERNAMEAD, PASSWORDAD) VALUES ('Sta1', '0365812848','$2b$12$N1SXbDnA99tyVDL2ZbRKHeR59ou2F.O88hf9roeTrz.U4yHrswrye');
-INSERT INTO LOGINADMIN(STAFFID, USERNAMEAD, PASSWORDAD) VALUES ('Sta2', '0365812847','$2a$11$WhusSTM44fBBxah.J17CIObhHKylM7PfbFW7jddYDWJ.RjFQlzT1G');
-
-
-INSERT INTO ENDOW(ENDOWID,SERVICE_GROUPID,DISCOUNT,STARTDATE,ENDDATE)
-VALUES ('ENDOW00001','SER0001',5,'2024-08-25','2026-08-25')
-
-
-INSERT INTO REVIEW_CRITERIA (CRITERIA_NAME) VALUES
-(N'Thái độ phục vụ'),
-(N'Tốc độ xử lý yêu cầu'),
-(N'Chất lượng xử lý'),
-(N'Mức độ hài lòng tổng thể');
 
 
 
@@ -379,10 +322,11 @@ INSERT INTO REVIEW_CRITERIA (CRITERIA_NAME) VALUES
 --DELETE FROM Payment WHERE CONTRACTNUMBER = 'SV0006'  
 --DELETE FROM contracts WHERE CONTRACTNUMBER = 'SV0006' 
 
-DELETE FROM CONTRACT_STATUS_HISTORY WHERE CONTRACTNUMBER = 'SV0002'
-DELETE FROM CONTRACT_FILES WHERE CONTRACTNUMBER = 'SV0002' 
-DELETE FROM Payment WHERE CONTRACTNUMBER = 'SV0002'  
-DELETE FROM contracts WHERE CONTRACTNUMBER = 'SV0002' 
+--DELETE FROM CONTRACT_STATUS_HISTORY WHERE CONTRACTNUMBER = 'SV0002'
+--DELETE FROM CONTRACT_FILES WHERE CONTRACTNUMBER = 'SV0002' 
+
+--DELETE FROM Payment WHERE CONTRACTNUMBER = 'SV0002'  
+--DELETE FROM contracts WHERE CONTRACTNUMBER = 'SV0002' 
 
 --DELETE FROM CONTRACT_STATUS_HISTORY WHERE CONTRACTNUMBER = 'SV0004'
 --DELETE FROM CONTRACT_FILES WHERE CONTRACTNUMBER = 'SV0004' 
@@ -394,35 +338,38 @@ DELETE FROM contracts WHERE CONTRACTNUMBER = 'SV0002'
 --DELETE FROM Payment WHERE CONTRACTNUMBER = 'SV0003'  
 --DELETE FROM contracts WHERE CONTRACTNUMBER = 'SV0003' 
 
---DELETE FROM CONTRACT_STATUS_HISTORY WHERE CONTRACTNUMBER = 'SV0001'
---DELETE FROM CONTRACT_FILES WHERE CONTRACTNUMBER = 'SV0001' 
---DELETE FROM Payment WHERE CONTRACTNUMBER = 'SV0001'  
---DELETE FROM contracts WHERE CONTRACTNUMBER = 'SV0001' 
+DELETE FROM CONTRACT_STATUS_HISTORY WHERE CONTRACTNUMBER = 'SV0016'
+DELETE FROM CONTRACT_FILES WHERE CONTRACTNUMBER = 'SV0016' 
+DELETE FROM Payment WHERE CONTRACTNUMBER = 'SV0016'  
+DELETE FROM contracts WHERE CONTRACTNUMBER = 'SV0016' 
 
-DELETE FROM Account WHERE CUSTOMERID = 'IT03030002' 
-DELETE FROM company WHERE CUSTOMERID = 'IT03030002' 
+DELETE FROM Account WHERE CUSTOMERID = 'IT03030016' 
+DELETE FROM company WHERE CUSTOMERID = 'IT03030016' 
 
-select * from staff
-select * from LOGINADMIN
-select * from REQUIREMENTS 
-select * from HISTORYREQ
-select * from ASSIGN
+--select * from staff
+--select * from LOGINADMIN
+--select * from REQUIREMENTS 
+--select * from HISTORYREQ
+--select * from ASSIGN
 select * from company 
 select * from Account 
 select * from contracts
 select * from CONTRACT_FILES
 select * from CONTRACT_STATUS_HISTORY
---select * from Payment
---select * from PAYMENT_TRANSACTION
---select * from SERVICE_TYPE
---select * from LOGINclient
---select * from PASSWORDRESETTOKEN
---select * from endow
---select * from REGULATIONS
-select * from CONTACT
-select * from NOTIFICATIONS
-select * from REVIEW
-select * from REVIEW_CRITERIA
-select * from REVIEW_DETAIL
-select * from REQUIREMENTS 
+select * from Payment
+select * from PAYMENT_TRANSACTION
+----select * from SERVICE_TYPE
+----select * from LOGINclient
+----select * from PASSWORDRESETTOKEN
+----select * from endow
+----select * from REGULATIONS
+--select * from CONTACT
+--select * from NOTIFICATIONS
+--select * from REVIEW
+--select * from REVIEW_CRITERIA
+--select * from REVIEW_DETAIL
+--select * from REQUIREMENTS 
+
+
+
 

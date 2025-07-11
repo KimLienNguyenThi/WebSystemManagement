@@ -36,35 +36,7 @@ namespace WebApi.Controllers.Admin
             return Ok(company);
         }
 
-        //Gia hạn hợp đồng
-        [Authorize(Roles = "Admin,Director")]
-        [HttpPost]
-        public IActionResult InsertExtend([FromBody] ContractDTO contractDTO, [FromQuery] string id)
-        {
-            if (contractDTO == null || string.IsNullOrEmpty(id))
-            {
-                Console.WriteLine("Dữ liệu đầu vào không hợp lệ.");
-                return BadRequest(new { success = false, message = "Dữ liệu không hợp lệ." });
-            }
-
-            var result = _contractService.InsertExtend(contractDTO, id);
-
-            if (result == null)
-            {
-                return Ok(new
-                {
-                    success = true,
-                    message = "Gia hạn tài khoản thành công",
-                    companyID = result
-                });
-            }
-            else
-            {
-                return BadRequest(new { success = false, message = result });
-            }
-
-        }
-
+        
         //Tạo file hợp đồng mới
         [Authorize(Roles = "Admin,Director")]
         [HttpPost]
@@ -119,6 +91,35 @@ namespace WebApi.Controllers.Admin
                 return BadRequest(new { success = false, message = result });
             }
             return Ok(new { success = true, fullPath });
+
+        }
+
+        //Gia hạn hợp đồng
+        [Authorize(Roles = "Admin,Director")]
+        [HttpPost]
+        public IActionResult InsertExtend([FromBody] ContractDTO contractDTO, [FromQuery] string id)
+        {
+            if (contractDTO == null || string.IsNullOrEmpty(id))
+            {
+                Console.WriteLine("Dữ liệu đầu vào không hợp lệ.");
+                return BadRequest(new { success = false, message = "Dữ liệu không hợp lệ." });
+            }
+
+            var result = _contractService.InsertExtend(contractDTO, id);
+
+            if (result == null)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    message = "Gia hạn tài khoản thành công",
+                    companyID = result
+                });
+            }
+            else
+            {
+                return BadRequest(new { success = false, message = result });
+            }
 
         }
 
@@ -319,32 +320,7 @@ namespace WebApi.Controllers.Admin
 
         }
 
-        //admin Xác nhận cancel
-        [Authorize(Roles = "Admin,Director")]
-        [HttpPost]
-        public async Task<IActionResult> CancelContract([FromBody] CancelContractRequest request)
-        {
-            if (request == null)
-            {
-                Console.WriteLine("Dữ liệu đầu vào không hợp lệ.");
-                return BadRequest(new { success = false, message = "Dữ liệu không hợp lệ." });
-            }
-
-            var (result, mes) = await _contractService.CancelContract(request);
-
-            if (result)
-            {
-                return Ok(new
-                {
-                    success = true,
-                    message = mes,
-                });
-            }
-            else
-            {
-                return BadRequest(new { success = false, message = mes });
-            }
-        }
+        
 
     }
 }

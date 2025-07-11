@@ -35,7 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\signed-contracts\" />
     <Folder Include="wwwroot\temp-pdfs\" />
   </ItemGroup>
 

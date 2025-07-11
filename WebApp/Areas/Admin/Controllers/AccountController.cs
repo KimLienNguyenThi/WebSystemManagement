@@ -77,13 +77,7 @@ namespace WebApp.Areas.Admin.Controllers
                     return Redirect("/admin/homeadmin/index");
                 }
             }
-            if (User.Identity != null && User.Identity.IsAuthenticated)
-            {
-                if (HttpContext.Request.Path.Value.Contains("/admin/LoginAdmin/Login", StringComparison.OrdinalIgnoreCase))
-                {
-                    return Redirect("/admin/homeadmin/index");
-                }
-            }
+            
             return View();
             //}
         }
@@ -612,7 +606,7 @@ namespace WebApp.Areas.Admin.Controllers
                 var jsonContent = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
 
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                var response = await _client.PostAsync(_apiConfigs.BaseApiUrl + "/admin/ContractsManagement/CancelContract", jsonContent);
+                var response = await _client.PostAsync(_apiConfigs.BaseApiUrl + "/admin/Account/CancelContract", jsonContent);
 
                 var result = await response.Content.ReadAsStringAsync();
                 var apiResponse = JsonConvert.DeserializeObject<JObject>(result);

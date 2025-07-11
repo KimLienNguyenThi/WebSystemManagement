@@ -17,7 +17,6 @@ namespace WebApi.Controllers.Admin
             _adminContactService = adminContactService;
         }
 
-        [Authorize(Roles = "Admin,Director")]
 
         [HttpPost]
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateContactReq req)
@@ -30,7 +29,6 @@ namespace WebApi.Controllers.Admin
 
             return Ok(new { success = true });
         }
-        [Authorize(Roles = "Admin,Director")]
 
         [HttpPost]
         public async Task<IActionResult> GetList([FromBody] GetListContactPaging req)
@@ -43,7 +41,6 @@ namespace WebApi.Controllers.Admin
 
             return Ok(new { success = true, data = result.res });
         }
-        [Authorize(Roles = "Admin,Director")]
 
         [HttpGet]
         public async Task<IActionResult> GetContactById([FromQuery] int id)

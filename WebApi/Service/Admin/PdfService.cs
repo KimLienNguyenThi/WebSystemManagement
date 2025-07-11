@@ -235,14 +235,19 @@ namespace WebApi.Service.Admin
             var (textRect, page) = FindTextPosition2(originalPdfBytes, "##SIGN_HERE_BENA##");
 
             float signatureWidth = 200f;
-            float signatureHeight = 70f;
+            float signatureHeight = 90f;
+            float offsetY = -100f;
+            float offsetX = 20f;
+            float finalY = textRect.GetY() + offsetY;
+            if (finalY < 30f) finalY = 30f; // tránh nằm quá thấp
 
             Rectangle rect = new Rectangle(
                 textRect.GetX(),
-                textRect.GetY(),
+                finalY,
                 signatureWidth,
                 signatureHeight
             );
+
 
             // Font chữ Unicode
             var fontPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "fonts", "tahoma.ttf");
@@ -336,7 +341,8 @@ namespace WebApi.Service.Admin
         }
 
         
-        public byte[] InsertSignatureImageToPdf(byte[] originalPdfBytes, string signatureBase64, string keyword, float offsetX = 30f, float offsetY = 113f, float width = 200f, float height = 70f)
+        public byte[] InsertSignatureImageToPdf(byte[] originalPdfBytes, string signatureBase64, string keyword, float offsetX = -310f, float offsetY = 113f, float width = 200f, float height = 70f) 
+            //x càng - càng về trái
         {
             using var pdfStream = new MemoryStream(originalPdfBytes);
             using var outputPdfStream = new MemoryStream();

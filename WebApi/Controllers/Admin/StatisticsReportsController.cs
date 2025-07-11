@@ -20,7 +20,7 @@ namespace WebApi.Controllers.Admin
             _context = context;
         }
 
-        //[Authorize(Roles = "Admin,Director")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpGet]
         public async Task<ActionResult<CustomerOverviewDTO>> GetCustomerOverview()
         {
@@ -29,13 +29,15 @@ namespace WebApi.Controllers.Admin
         }
 
         //doanh thu
-        //[Authorize(Roles = "Admin,Director")]
+        [Authorize(Roles = "Admin,Director")]
         [HttpGet]
         public async Task<ActionResult<RevenueOverviewDTO>> GetRevenueOverview([FromQuery] int year)
         {
             var result = await _reportsService.GetRevenueOverview(year);
             return Ok(result);
         }
+        [Authorize(Roles = "Admin,Director")]
+
         [HttpGet]
         public async Task<ActionResult<ServiceUsageDTO>> GetServiceUsage()
         {
@@ -43,12 +45,16 @@ namespace WebApi.Controllers.Admin
             return Ok(data);
         }
 
+        [Authorize(Roles = "Admin,Director")]
+
         [HttpGet]
         public async Task<ActionResult<ReviewOverviewDTO>> GetReviewStatistics()
         {
             var result = await _reportsService.GetReviewStatistics();
             return Ok(result);
         }
+        [Authorize(Roles = "Admin,Director")]
+
         [HttpGet]
         public async Task<ActionResult<List<ReviewOverviewDTO>>> GetLoyalCustomers()
         {

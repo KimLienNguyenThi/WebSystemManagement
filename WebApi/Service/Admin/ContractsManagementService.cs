@@ -826,43 +826,6 @@ namespace WebApi.Service.Admin
                 Console.WriteLine($"Lỗi hệ thống: {ex.Message}");
             }
         }
-        public async Task<(bool, string)> CancelContract(CancelContractRequest request)
-        {
-            try
-            {
-                var contractCancel = await _context.Contracts.Where(item => item.Contractnumber == request.ContractNumber).FirstOrDefaultAsync();
-                if (contractCancel == null)
-                {
-                    return (false, "Không tìm thấy thông tin hợp đồng");
-                }
-                var listStatus = new int[] { 0, 1, 2, 3 };
-                if (listStatus.Contains(contractCancel.Constatus.Value) == false)
-                {
-                    return (false, "Trạng thái hợp đồng không hợp lệ!");
-                }
-
-                contractCancel.Constatus = 7;
-                contractCancel.Messageun = request.Message;
-                _context.Contracts.Update(contractCancel);
-                var newContractStatusHistory = new ContractStatusHistory
-                {
-                    Contractnumber = request.ContractNumber,
-                    OldStatus = contractCancel.Constatus,
-                    NewStatus = 7,
-                    ChangedAt = DateTime.Now,
-                    ChangedBy = request.StaffId,
-                };
-
-                await _context.ContractStatusHistories.AddAsync(newContractStatusHistory);
-                await _context.SaveChangesAsync();
-                return (true, "Thành công");
-            }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine($"Lỗi hệ thống: {ex.Message}");
-                return (false, "Đã có lỗi xảy ra, vui lòng thử lại");
-            }
-        }
+        
     }
 }

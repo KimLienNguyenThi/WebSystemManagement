@@ -30,9 +30,6 @@ namespace WebApp.Controllers
             using (var client = new HttpClient())
             {
                 var apiUrl = $"{_apiConfigs.BaseApiUrl}/admin/SeeContract_Sign/CheckStatus?fileName={fileName}&email={email}";
-
-               
-
                 try
                 {
                     var response = await client.GetAsync(apiUrl);
@@ -131,7 +128,6 @@ namespace WebApp.Controllers
             vnpay.AddRequestData("vnp_Amount", ((int)(amount * 100)).ToString());
             vnpay.AddRequestData("vnp_BankCode", "VNBANK");
             vnpay.AddRequestData("vnp_CreateDate", DateTime.UtcNow.AddHours(timeZone).ToString("yyyyMMddHHmmss"));
-            vnpay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
             vnpay.AddRequestData("vnp_CurrCode", "VND");
             vnpay.AddRequestData("vnp_IpAddr", HttpContext.Connection.RemoteIpAddress?.ToString());
             vnpay.AddRequestData("vnp_Locale", "vn");

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Ocsp;
 using Microsoft.AspNetCore.Http.HttpResults;
+using WebApi.Service.Introduce;
 namespace WebApi.Controllers.Admin
 {
     [Route("api/admin/[controller]/[action]")]
@@ -46,7 +47,7 @@ namespace WebApi.Controllers.Admin
             return Ok(company);
         }
 
-        [Authorize(Roles = "Admin,Director")]
+       [Authorize(Roles = "Admin,Director")]
         [HttpPut]
         public IActionResult UpdateStatus([FromBody] updateID updateID)
         {
@@ -103,7 +104,7 @@ namespace WebApi.Controllers.Admin
             return BadRequest(new { success = false, message = company });
         }
 
-        [Authorize(Roles = "Admin,Director")]
+        //[Authorize(Roles = "Admin,Director")]
 
         [HttpPost]
         public async Task<IActionResult> ExportToCsv([FromBody] ExportRequestDTO request)
@@ -193,7 +194,7 @@ namespace WebApi.Controllers.Admin
         }
 
         //lấy list hiển thị
-        [Authorize(Roles = "Admin,Director")]
+       [Authorize(Roles = "Admin,Director")]
         [HttpPost]
         public async Task<ActionResult<CompanyContractDTOs>> GetListPending([FromBody] GetListCompanyPaging req)
         {
@@ -201,88 +202,6 @@ namespace WebApi.Controllers.Admin
             return Ok(regu);
         }
 
-        //boss kí
-        //[Authorize(Policy = "DirectorPolicy")]
-        //[HttpPost]
-        //public async Task<IActionResult> SignPdfWithAdminCertificate([FromBody] SignAdminRequest request)
-        //{
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(request.FilePath) || string.IsNullOrEmpty(request.StaffId) || string.IsNullOrEmpty(request.ContractNumber))
-        //            return BadRequest(new { success = false, message = "Thiếu thông tin file, mã hợp đồng hoặc nhân viên." });
-
-        //        //if (!System.IO.File.Exists(request.FilePath))
-        //        //return NotFound(new { success = false, message = "File hợp đồng không tồn tại." });
-
-        //        // Convert từ đường dẫn web sang vật lý
-        //        string physicalPath = Path.Combine(
-        //            _env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"),
-        //            request.FilePath.TrimStart('/')
-        //        );
-
-        //        if (!System.IO.File.Exists(physicalPath))
-        //            return NotFound(new { success = false, message = "File hợp đồng không tồn tại." });
-
-        //        // Đọc file gốc từ đường dẫn vật lý
-        //        byte[] originalPdfBytes = await System.IO.File.ReadAllBytesAsync(physicalPath);
-
-
-        //        // Ký file
-        //        byte[] signedPdfBytes = _pdfService.SignPdfWithAdminCertificate(originalPdfBytes, request.StaffId);
-
-        //        // 3. Tạo đường dẫn lưu file mới
-        //        var folderPath = Path.Combine(
-        //            _env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"),
-        //            "signed-contracts"
-        //        );
-        //        if (!Directory.Exists(folderPath))
-        //            Directory.CreateDirectory(folderPath);
-
-        //        // 4. Tạo tên file mới theo timestamp
-        //        string baseFileName = Path.GetFileNameWithoutExtension(request.FilePath);
-        //        string newFileName = $"{baseFileName}_{DateTime.Now:yyyyMMddHHmmss}.pdf";
-        //        string newFilePath = Path.Combine(folderPath, newFileName);
-
-        //        // 5. Ghi file đã ký vào thư mục mới
-        //        await System.IO.File.WriteAllBytesAsync(newFilePath, signedPdfBytes);
-
-        //        try
-        //        {
-        //            if (System.IO.File.Exists(physicalPath))
-        //                System.IO.File.Delete(physicalPath);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine($"Không thể xóa file gốc tại {physicalPath}: {ex.Message}");
-        //        }
-
-        //        // Gán lại đường dẫn mới để lưu DB (tương đối)
-        //        string relativePath = Path.Combine("/signed-contracts", newFileName).Replace("\\", "/");
-        //        request.FilePath = relativePath;
-
-        //        // Gọi hàm cập nhật DB (không lưu file nữa, chỉ cập nhật trạng thái, lịch sử, ContractFile)
-        //        string result = await _accountService.UploadDirectorSigned(request);
-
-        //        // Trả về phản hồi thành công nếu update cũng thành công
-        //        if (result.Contains("thành công") || result.EndsWith(".pdf"))
-        //        {
-        //            return Ok(new
-        //            {
-        //                success = true,
-        //                message = "Đã ký thành công và cập nhật dữ liệu.",
-        //                signedFilePath = relativePath
-        //            });
-        //        }
-
-        //        // Nếu UploadSignedContract trả về lỗi
-        //        return StatusCode(500, new { success = false, message = result });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Lỗi khi ký hợp đồng: {ex.Message}");
-        //        return StatusCode(500, new { success = false, message = "Lỗi hệ thống khi ký file." });
-        //    }
-        //}
 
         //Gửi client
         [Authorize(Roles = "Admin,Director")]
@@ -408,6 +327,31 @@ namespace WebApi.Controllers.Admin
 
             return Ok(result);
         }
+        //admin Xác nhận cancel
+        //[Authorize(Roles = "Admin,Director")]
+        [HttpPost]
+        public async Task<IActionResult> CancelContract([FromBody] CancelContractRequest request)
+        {
+            if (request == null)
+            {
+                Console.WriteLine("Dữ liệu đầu vào không hợp lệ.");
+                return BadRequest(new { success = false, message = "Dữ liệu không hợp lệ." });
+            }
 
+            var (result, mes) = await _accountService.CancelContract(request);
+
+            if (result)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    message = mes,
+                });
+            }
+            else
+            {
+                return BadRequest(new { success = false, message = mes });
+            }
+        }
     }
 }
